@@ -20,7 +20,7 @@ function App() {
         setTodos(data.todos);
       })
 
-      console.log(todos);
+      console.log('Add', todos);
   }
 
   const handleDelete = (_id: any) => {
@@ -29,7 +29,7 @@ function App() {
         setTodos(data.todos);
       });
 
-      console.log(todos);
+      console.log('Delete', todos);
   }
 
   useEffect(() => {
