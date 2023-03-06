@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { addTodo, getTodos } from './api';
+import { addTodo, deleteTodo, getTodos } from './api';
 import './App.css';
 
 function App() {
@@ -19,6 +19,17 @@ function App() {
         }
         setTodos(data.todos);
       })
+
+      console.log(todos);
+  }
+
+  const handleDelete = (_id: any) => {
+    deleteTodo(_id)
+      .then(({ data }) => {
+        setTodos(data.todos);
+      });
+
+      console.log(todos);
   }
 
   useEffect(() => {
@@ -29,6 +40,12 @@ function App() {
   return (
     <div >
       <button onClick={handleClick}>Add task</button>
+      {todos.map((item: any) => {
+        return (
+          <div>{item.title} {item._id}
+          <button onClick={() => handleDelete(item._id)}>Delete</button></div>
+        )
+      })}
     </div>
   );
 }

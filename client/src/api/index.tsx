@@ -45,7 +45,7 @@ export const updateTodo = async (todo: any): Promise<AxiosResponse<any>> => {
 
 export const deleteTodo = async (_id: any): Promise<AxiosResponse<any>> => {
     try {
-        const deleteTodo = await axios.delete(baseUrl + '/delete-todo/' + _id);
+        const deleteTodo = await axios.delete(`${baseUrl}/delete-todo/${_id}`);
         return deleteTodo;
     } catch (err) {
         throw err;
