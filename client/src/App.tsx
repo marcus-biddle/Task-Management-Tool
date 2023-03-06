@@ -1,9 +1,15 @@
 import { useEffect, useState } from 'react';
 import { addTodo, deleteTodo, getTodos } from './api';
 import './App.css';
+import { SubmitTaskForm } from './component-library/Forms/Add';
+import { List } from './component-library/List';
+import { Header } from './components/Header';
 
 function App() {
-  const [todos, setTodos] = useState([])
+  // make context for todos list
+  const [todos, setTodos] = useState([]);
+  
+  
 
   const fetchTodos = () => {
     getTodos()
@@ -32,14 +38,27 @@ function App() {
       console.log('Delete', todos);
   }
 
+  
+
   useEffect(() => {
     fetchTodos();
     console.log(todos);
+    
   }, []);
-
+  
+// Add categories to make filters. That would be a good addition.
   return (
-    <div >
+    <div>
+      {/* Store a cookie if user has been here before */}
+      <Header />
+      <div>What are your plans today?</div>
+      {/* We can probably implement dark mode in this */}
+      {/* Could make this a popup modal */}
+      <SubmitTaskForm />
+      
       <button onClick={handleClick}>Add task</button>
+      {/* wrap this up */}
+      <List data={todos} />
       {todos.map((item: any) => {
         return (
           <div>{item.title} {item._id}
