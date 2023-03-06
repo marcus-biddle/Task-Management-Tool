@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 
-const baseUrl: string = 'http://localhost:8081/api/v1';
+const baseUrl: string = 'https://mongodb-server-6t4m.onrender.com/api/v1';
 
 export const getTodos = async (): Promise<AxiosResponse<any>> => {
     try {
