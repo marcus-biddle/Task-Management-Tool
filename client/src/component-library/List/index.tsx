@@ -1,15 +1,17 @@
 import React from 'react'
+import { Card, CardDescription, CardHeader, ListWrapper } from './styled'
 
 export const List = ({ data }: any) => {
-    // basic list style
   return (
-    <div>
+    <ListWrapper>
         {data.map((item: any) => {
             return (
-                // List bullets?
-                <div>{item.title}</div>
+                <Card key={item._id}>
+                  <CardHeader>{item.title}</CardHeader>
+                  <CardDescription>{item.description}</CardDescription>
+                </Card>
             )
         })}
-    </div>
+    </ListWrapper>
   )
 }
