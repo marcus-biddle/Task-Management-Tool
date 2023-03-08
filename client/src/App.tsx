@@ -11,7 +11,7 @@ function App() {
 
 
   return (
-    <div>
+    <div style={{ backgroundColor: 'grey', height: '100vh'}}>
       {/* Store a cookie if user has been here before */}
       <Header />
       <div>Keep track of your tasks below</div>

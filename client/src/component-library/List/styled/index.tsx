@@ -3,10 +3,11 @@ import styled from "styled-components";
 export const ListWrapper = styled.div`
     margin-left: 2rem;
     margin-right: 2rem;
-    
 `;
 
 export const CardHeader = styled.div`
+    display: inline-block;
+    vertical-align: bottom;
     text-transform: uppercase;
     font-family: 'Bebas Neue', cursive;
     font-size: 1.677rem
@@ -21,9 +22,9 @@ export const CardDescription = styled.p`
     padding-left: 6px;
     padding-right: 6px;
     text-transform: capitalize;
+    opacity: .5;
     &::before {
         font-family: cursive;
-        opacity: .5;
         color: orange;
         content: "Description: ";
     }
@@ -32,6 +33,6 @@ export const CardDescription = styled.p`
 export const Card = styled.div`
     background-color: rgba(0, 0, 0, 0.822);
     color: white;
-    border: solid;
+    border: solid black;
     line-height: .8rem;
 `;
