@@ -19,6 +19,7 @@ export const Item = ({ item }: any) => {
         <div style={{ display: 'flex'}}>
         <OptionsButton color="red" onClick={() => deleteTask(item._id)}>Delete</OptionsButton>
         <OptionsButton onClick={() => deleteTask(item._id)}>Edit</OptionsButton>
+        <OptionsButton color='blue' onClick={() => deleteTask(item._id)}>Completed</OptionsButton>
         </div>
         </Show>
         <Show when={!open}>

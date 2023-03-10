@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 
 export const OptionsButton = styled.div`
-    background-color: ${props => props.color ? props.color : 'green'};
+    background-color: ${props => props.color === 'red' ? props.color : props.color === 'blue' ? props.color : 'green'};
     display: flex;
     justify-content: center;
     margin-top: auto;
