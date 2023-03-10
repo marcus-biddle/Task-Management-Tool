@@ -6,14 +6,12 @@ export const ListWrapper = styled.div`
 `;
 
 export const CardHeader = styled.div`
-    display: inline-block;
-    vertical-align: bottom;
     text-transform: uppercase;
     font-family: 'Bebas Neue', cursive;
     font-size: 1.677rem
     letter-spacing: 1.755px;
-    padding-left: 12px;
-    padding-top: 16px;
+    padding-left: 1rem;
+    padding-top: .333rem;
 `;
 
 export const CardDescription = styled.p`
@@ -31,8 +29,18 @@ export const CardDescription = styled.p`
 `;
 
 export const Card = styled.div`
+    cursor: pointer;
+    margin-bottom: .455rem;
     background-color: rgba(0, 0, 0, 0.822);
     color: white;
     border: solid black;
-    line-height: .8rem;
+`;
+
+export const DueDate = styled.div`
+padding-top: .6rem;
+padding-right: 1rem;
+&::before {
+    color: grey;
+    content: "Due date: ";
+}
 `;

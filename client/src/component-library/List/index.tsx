@@ -1,23 +1,42 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { getDate } from '../../helpers/conditionals';
 import { useTodoContext } from '../../hooks/useTodoContext';
-import { Card, CardDescription, CardHeader, ListWrapper } from './styled'
+import { OptionsButton } from '../Buttons';
+import Show from '../Functional/Show';
+import { Card, CardDescription, CardHeader, DueDate, ListWrapper } from './styled'
 
-export const List = ({ data }: any) => {
+export const Item = ({ item }: any) => {
   const { deleteTask } = useTodoContext();
+  const [open, isOpen] = useState(false);
+
   return (
-    <ListWrapper>
+    <Card key={item._id} onClick={() => isOpen(!open)}>
+      <div style={{ display: 'flex', justifyContent: 'space-between'}}>
+        <CardHeader>
+          {item.title}
+        </CardHeader>
+        <Show when={open}>
+        <div style={{ display: 'flex'}}>
+        <OptionsButton color="red" onClick={() => deleteTask(item._id)}>Delete</OptionsButton>
+        <OptionsButton onClick={() => deleteTask(item._id)}>Edit</OptionsButton>
+        </div>
+        </Show>
+        <Show when={!open}>
+          <DueDate>{getDate(' ')}</DueDate>
+        </Show>
+      </div>
+      <Show when={open}>
+        <CardDescription>{item.description}</CardDescription>
+      </Show>
+    </Card>
+  )
+}
+export const List = ({ data }: any) => {
+  return (
+    <ListWrapper >
         {data.map((item: any) => {
             return (
-                <Card key={item._id}>
-                  <div style={{ lineHeight: '18px'}}>
-                    <CardHeader>
-                      {item.title}
-                    </CardHeader>
-                    <span style={{ opacity: '.8', backgroundColor: 'blue', borderRadius: '2rem', padding: '1px', paddingLeft: '8px', paddingRight: '8px', fontSize: '12px', marginLeft: '12px'}} onClick={() => deleteTask(item._id)}>Delete</span>
-                  </div>
-                  
-                  <CardDescription>{item.description}</CardDescription>
-                </Card>
+                <Item item={item} />
             )
         })}
     </ListWrapper>
