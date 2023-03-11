@@ -20,11 +20,13 @@ export const CardDescription = styled.p`
     padding-left: 6px;
     padding-right: 6px;
     text-transform: capitalize;
-    opacity: .5;
+    opacity: .85;
+    font-size: 15px;
     &::before {
         font-family: cursive;
         color: orange;
         content: "Description: ";
+        font-size: 20px;
     }
 `;
 

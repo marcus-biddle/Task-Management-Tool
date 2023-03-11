@@ -13,6 +13,8 @@ export const OptionsButton = styled.div`
     border-radius: 25px;
 `;
 
-export const submitButton = styled.div`
-
+export const SubmitButton = styled.button`
+    border-radius: 5px;
+    font-family: 'Bebas Neue', cursive;
+    font-size: 1.15rem;
 `;
