@@ -2,7 +2,9 @@ import styled from "styled-components";
 
 
 export const OptionsButton = styled.div`
-    background-color: ${props => props.color === 'red' ? props.color : props.color === 'blue' ? props.color : 'green'};
+    background-color: rgba(255, 127, 15, 0.6);
+    text-transform: uppercase;
+    color: black;
     display: flex;
     justify-content: center;
     margin-top: auto;
@@ -10,7 +12,8 @@ export const OptionsButton = styled.div`
     padding: 3px;
     padding-left: 5px;
     padding-right: 5px;
-    border-radius: 25px;
+    border-radius: 5px;
+    margin-right: 1rem;
 `;
 
 export const SubmitButton = styled.button`

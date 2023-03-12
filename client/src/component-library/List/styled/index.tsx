@@ -43,6 +43,6 @@ padding-top: .6rem;
 padding-right: 1rem;
 &::before {
     color: grey;
-    content: "Due date: ";
+    content: "Finish by: ";
 }
 `;

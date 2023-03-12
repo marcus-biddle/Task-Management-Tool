@@ -2,9 +2,14 @@ import React, { useState } from 'react'
 import { useTodoContext } from '../../../hooks/useTodoContext';
 import { SubmitButton } from '../../Buttons';
 import { StyledForm, StyledInput, StyledLabel } from './styled';
+import DatePicker from "react-datepicker";
 
-export const SubmitTaskForm = () => {
+import "react-datepicker/dist/react-datepicker.css";
+import { showIfOrElse } from '../../../helpers/conditionals';
+
+export const SubmitTaskForm = ({ isEditing }: any) => {
     const { addTask } = useTodoContext();
+    const [startDate, setStartDate] = useState(new Date());
     const [form, setForm] = useState({
         title: '',
         description: '',
@@ -18,6 +23,15 @@ export const SubmitTaskForm = () => {
           [event.target.id]: event.target.value,
         });
       };
+
+      const handleDate = (date: Date) => {
+        // create hook for date
+        setStartDate(date);
+        setForm({
+          ...form,
+          limit: `${date.toISOString()}`,
+        })
+      }
     
       const handleSubmit = (event: any) => {
         event.preventDefault();
@@ -27,39 +41,46 @@ export const SubmitTaskForm = () => {
           title: '',
           description: '',
           status: false,
-          limit: 'null'
+          limit: '',
         });
       };
 
       // Need to create validators to pervent hacking.
   return (
     <StyledForm onSubmit={handleSubmit}>
-      <div>
+      <div style={{ paddingTop: '1.5px'}}>
+        <div style={{  display: 'flex', lineHeight: '3px'}}>
+          <StyledLabel>
+              Title:
+          </StyledLabel>
+          <StyledInput id='title' type='text' value={form.title} onChange={handleChange}/>
+        </div>
+      </div>
+      
+      <div style={{ paddingTop: '3px'}}>
+        <div style={{ display: 'flex', lineHeight: '3px'}}>
+          <StyledLabel>
+            description:
+          </StyledLabel>
+          <StyledInput id='description' type='text' value={form.description} onChange={handleChange}/>
+        </div>
+      </div>
+
+      <div style={{ display: 'flex', lineHeight: '.5px'}}>
         <StyledLabel>
-            Title:
+          Goal Date:
         </StyledLabel>
-        <StyledInput id='title' type='text' value={form.title} onChange={handleChange}/>
+        <div style={{ marginTop: 'auto', marginBottom: 'auto', padding: '5px' }}>
+          <DatePicker selected={startDate} onChange={(date: Date) => handleDate(date)} />
+        </div>
       </div>
-      <div>
-      <StyledLabel>
-          description:
-      </StyledLabel>
-      <StyledInput id='description' type='text' value={form.description} onChange={handleChange}/>
-      </div>
-      <div>
-      <StyledLabel>
-          End Date:
-          {/* We could put in props for sizing */}
-      </StyledLabel>
-      <StyledInput id='description' type='text' value={form.description} onChange={handleChange}/>
-      </div>
+      <>
+      {showIfOrElse(isEditing)
+      (<SubmitButton type='submit'>Submit</SubmitButton>)
+      (<SubmitButton type='submit'>Submit</SubmitButton>)}
         
-        
-        {/* <StyledLabel>
-          // Change to end date
-          Add deadline?
-        </StyledLabel> */}
-        <SubmitButton type='submit'>Submit</SubmitButton>
+      </>
+      
       </StyledForm>
   )
 }

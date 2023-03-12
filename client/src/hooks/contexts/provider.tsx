@@ -10,7 +10,6 @@ export interface TodoProviderProps {
 
 export const TodoProvider: FC<TodoProviderProps> = ({ children }) => {
     const [data, setData] = useState<any[]>([]);
-    // const [state, dispatch] = useReducer(todoReducer, )
 
     useEffect(() => {
         getTodos()

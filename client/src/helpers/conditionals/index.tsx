@@ -8,6 +8,8 @@ export const getDate = (date?: string) => {
     const currentDate = new Date().toLocaleString('en-us', { dateStyle: 'long'});
     const clock = `${currentDay}, ${currentDate}`
 
-    return date ? 'date received' : clock
+
+
+    return date ? new Date(date).toLocaleDateString(undefined, { weekday: 'short', month: '2-digit', day: '2-digit', year: 'numeric'}) : clock
     
 }

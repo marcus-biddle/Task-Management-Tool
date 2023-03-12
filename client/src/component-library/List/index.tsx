@@ -10,7 +10,7 @@ export const Item = ({ item }: any) => {
   const [open, isOpen] = useState(false);
 
   return (
-    <Card key={item._id} onClick={() => isOpen(!open)}>
+    <Card onClick={() => isOpen(!open)}>
       <div style={{ display: 'flex', justifyContent: 'space-between'}}>
         <CardHeader>
           {item.title}
@@ -23,7 +23,7 @@ export const Item = ({ item }: any) => {
         </div>
         </Show>
         <Show when={!open}>
-          <DueDate>{getDate(' ')}</DueDate>
+          <DueDate>{getDate(item.limit)}</DueDate>
         </Show>
       </div>
       <Show when={open}>
@@ -37,7 +37,7 @@ export const List = ({ data }: any) => {
     <ListWrapper >
         {data.map((item: any) => {
             return (
-                <Item item={item} />
+                <Item key={item._id} item={item} />
             )
         })}
     </ListWrapper>

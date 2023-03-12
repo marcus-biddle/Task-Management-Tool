@@ -1,8 +1,10 @@
 import style from 'styled-components';
 
-export const StyledLabel = style.label`
+export const StyledLabel = style.div`
     text-transform: uppercase;
     padding: 10px;
+    margin-top: auto;
+    margin-bottom: auto;
 `;
 
 export const StyledForm = style.form`
@@ -22,6 +24,5 @@ export const StyledForm = style.form`
 `;
 
 export const StyledInput = style.input`
-    height: 1.333rem;
-    padding-top: .4rem;
+    
 `;
