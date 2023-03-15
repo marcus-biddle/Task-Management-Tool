@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { addTodo, deleteTodo, getTodos } from './api';
 import './App.css';
 import { List } from './component-library/List';
+import { Form } from './components/Form';
 import { Header } from './components/Header';
 import { SubmissionForm } from './components/Submisison';
 import { useTodoContext } from './hooks/useTodoContext';
@@ -16,8 +17,8 @@ function App() {
       <Header />
       <div style={{ textAlign: 'center', fontSize: '24px', marginTop: '2rem', marginBottom: '2rem'}}>Got Tasks?</div>
       {/* We can probably implement dark mode in this */}
-      <SubmissionForm />
-
+      {/* <SubmissionForm /> */}
+      <Form />
       {/* wrap this up */}
       <List data={tasks} />
       {tasks.map((item: any) => {
