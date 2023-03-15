@@ -5,17 +5,24 @@ import { List } from './component-library/List';
 import { Form } from './components/Form';
 import { Header } from './components/Header';
 import { SubmissionForm } from './components/Submisison';
+import { showIfOrElse } from './helpers/conditionals';
 import { useTodoContext } from './hooks/useTodoContext';
 
 function App() {
   const { tasks, deleteTask, addTask } = useTodoContext();
+  const [ editing, isEditing ] = useState(() => {
+    tasks.filter((task: any) => task.status === true)
+    if (tasks.length > 0) {return true} else {return false}
+  })
 
 
   return (
     <div style={{ backgroundColor: 'grey', height: '100vh'}}>
       {/* Store a cookie if user has been here before */}
       <Header />
-      <div style={{ textAlign: 'center', fontSize: '24px', marginTop: '2rem', marginBottom: '2rem'}}>Got Tasks?</div>
+      <div style={{ color: 'white', fontWeight: 'bold', textAlign: 'center', fontSize: '24px', marginTop: '2rem', marginBottom: '2rem'}}>
+        Add A <span style={{ textDecorationLine: 'underline', textDecorationStyle: 'wavy', textDecorationColor: '#ff7f0f8f' }}>Task</span> Below
+      </div>
       {/* We can probably implement dark mode in this */}
       {/* <SubmissionForm /> */}
       <Form />
