@@ -1,26 +1,17 @@
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { dateRegex } from '../../constants/types';
-import { getEditableTask } from '../../helpers/tasks';
+import { DataType, dateRegex } from '../../constants/types';
 import { useTodoContext } from '../../hooks/useTodoContext';
 
-export interface DataType {
-  title: String;
-  description: String;
-  completed: Boolean;
-  date: String;
-  editing: Boolean;
-  _id?: String;
-}
+//TODO: styled components.
 
 export const Form = ({ isEditing }: any) => {
-  const { tasks, updateTask, addTask } = useTodoContext();
-  console.log(tasks);
-    const changeTask = getEditableTask(tasks);
-
-    //clear values?
+  const { updateTask, addTask } = useTodoContext();
   const {
     register,
     handleSubmit,
+    resetField,
+    setValue,
     formState: { errors },
   } = useForm();
 
@@ -33,28 +24,45 @@ export const Form = ({ isEditing }: any) => {
     }},
   }
 
-  const handleSubmission = (data: any) => {
-    // Change these once db is updated to reflect modal attributes.
-    const addData: DataType = {...data, completed: false, editing: false};
-    const editData: DataType = {...data, completed: false, editing: false, _id: changeTask._id}
-    console.log(editData)
-    // check if task is true then instead of addtask just edit task
-    changeTask ? updateTask(editData) : addTask(addData);
+  const customReset = () => {
+    resetField('title');
+    resetField('description');
+    resetField('date');
   }
-// we can use ternaries to check if there is a task with status true then put 
-// those values as placeholders 
+
+  const handleSubmission = (data: any) => {
+    const addData: DataType = {...data, completed: false, editing: false};
+    const editData: DataType = {...data, completed: false, editing: false, _id: isEditing._id}
+    isEditing ? updateTask(editData) : addTask(addData);
+    customReset();
+    console.log(addData);
+  }
+
+  useEffect(() => {
+    const customSetValue = () => {
+      setValue('title', isEditing.title);
+      setValue('description', isEditing.description);
+      setValue('date', isEditing.date);
+    }
+
+    if (isEditing) {
+      customSetValue();
+    } else {
+
+    }
+  }, [isEditing, setValue])
+
   return (
     <form onSubmit={handleSubmit((data) => handleSubmission(data))}>
         <label>Title</label>
-      <input defaultValue={changeTask ? changeTask.title : ' y'} {...register('title', formOptions.title)} />
+      <input placeholder='Add a title' {...register('title', formOptions.title)} />
       <>
         { errors?.title && errors.title?.message }
       </>
       <label>Description</label>
-      <input defaultValue={changeTask ? changeTask.description : ' '} placeholder='description' {...register('description', formOptions.description)} />
+      <input placeholder='Add a description' {...register('description', formOptions.description)} />
       <label>Due by:</label>
-      {/* Need to fix limit => date in server, and to format date */}
-      <input defaultValue={changeTask ? changeTask.limit : ' '} placeholder='date' {...register('date', formOptions.date)} />
+      <input placeholder='MM/DD/YYYY' {...register('date', formOptions.date)} />
       <>
         { errors?.date && errors.date?.message }
       </>

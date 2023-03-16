@@ -1,5 +1,9 @@
 import styled from "styled-components";
 
+interface CardProps {
+    completed: boolean;
+  }
+
 export const ListWrapper = styled.div`
     margin-left: 2rem;
     margin-right: 2rem;
@@ -30,19 +34,21 @@ export const CardDescription = styled.p`
     }
 `;
 
-export const Card = styled.div`
+export const Card = styled.div<CardProps>`
     cursor: pointer;
     margin-bottom: .455rem;
     background-color: rgba(0, 0, 0, 0.822);
     color: white;
     border: solid black;
+    text-decoration: ${props => props.completed ? 'line-through' : 'none'};
+    opacity: ${props => props.completed ? '.75' : '1'};
 `;
 
 export const DueDate = styled.div`
-padding-top: .6rem;
-padding-right: 1rem;
-&::before {
-    color: grey;
-    content: "Finish by: ";
-}
+    padding-top: .6rem;
+    padding-right: 1rem;
+    &::before {
+        color: grey;
+        content: "Finish by: ";
+    }
 `;

@@ -31,7 +31,6 @@ export const addTodo = async (formData: any): Promise<AxiosResponse<any>> => {
     }
 };
 
-// will need to change this to include editing the description
 export const updateTodo = async (todo: any): Promise<AxiosResponse<any>> => {
     try {
         // const todoUpdate = { status: true }

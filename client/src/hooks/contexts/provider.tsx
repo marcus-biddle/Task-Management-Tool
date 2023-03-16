@@ -1,13 +1,11 @@
 import { ReactNode, FC, useEffect, useState } from 'react';
 import { addTodo, deleteTodo, getTodos, updateTodo } from '../../api';
-import { DataType } from '../../components/Form';
+import { DataType } from '../../constants/types';
 import { TodoContext } from './context';
 
 export interface TodoProviderProps {
     children: ReactNode
 }
-
-
 
 export const TodoProvider: FC<TodoProviderProps> = ({ children }) => {
     const [data, setData] = useState<any[]>([]);
@@ -17,7 +15,6 @@ export const TodoProvider: FC<TodoProviderProps> = ({ children }) => {
             .then(({ data: { todos }}) => {
                 setData(todos)})
             .catch((err) => console.log(err));
-        console.log(data)
     }, [getTodos]);
 
     const updateTask = (form: any) => {
@@ -25,6 +22,7 @@ export const TodoProvider: FC<TodoProviderProps> = ({ children }) => {
             .then(({ data }: any) => {
                 setData(data.todos);
             })
+            console.log('update', data)
     }
     
     const deleteTask = (_id: number) => {
@@ -32,6 +30,7 @@ export const TodoProvider: FC<TodoProviderProps> = ({ children }) => {
             .then(({ data }: any) => {
                 setData(data.todos);
             })
+            console.log('delete', data)
     }
 
     const addTask = (form: DataType) => {
@@ -44,7 +43,7 @@ export const TodoProvider: FC<TodoProviderProps> = ({ children }) => {
                 console.log('added task.')
                 setData(data.todos);
             })
-        
+            console.log('add', data)
     }
 
     const value =  {
