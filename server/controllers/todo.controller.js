@@ -11,13 +11,14 @@ const getTodos = async (req, res) => {
 
 const addTodo = async (req, res) => {
     try {
-        const { title, description, status, limit } = req.body;
+        const { title, description, completed, date, editing } = req.body;
 
         const todo = new Todo({
             title: title,
             description: description,
-            status: status,
-            limit: limit,
+            completed: completed,
+            date: date,
+            editing: editing
         })
 
         const newTodo = await todo.save();

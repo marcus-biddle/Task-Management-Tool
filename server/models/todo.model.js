@@ -10,14 +10,18 @@ const todoSchema = new Schema(
             type: String,
             required: true,
         },
-        status: {
+        completed: {
             type: Boolean,
             required: true,
         },
-        limit: {
+        date: {
             type: String,
             required: true,
         },
+        editing: {
+            type: Boolean,
+            required: true
+        }
     },
     { timestamps: true }
 )
