@@ -32,8 +32,8 @@ const addTodo = async (req, res) => {
 
 const updateTodo = async (req, res) => {
     try {
-        const { _id, body } = req.body;
-        const updateTodo = await Todo.findByIdAndUpdate( { _id: _id }, body);
+        const { params: { id }, body } = req;
+        const updateTodo = await Todo.findByIdAndUpdate( { _id: id }, body);
         const allTodos = await Todo.find();
 
         res.status(200).json({ 
