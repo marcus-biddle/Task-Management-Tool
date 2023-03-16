@@ -18,6 +18,7 @@ export const Item = ({ item }: any) => {
         <Show when={open}>
         <div style={{ display: 'flex'}}>
         <OptionsButton color="red" onClick={() => deleteTask(item._id)}>Delete</OptionsButton>
+        {/* For handleEdit we'll just want to update status to be true */}
         <OptionsButton onClick={() => deleteTask(item._id)}>Edit</OptionsButton>
         <OptionsButton color='blue' onClick={() => deleteTask(item._id)}>Completed</OptionsButton>
         </div>
