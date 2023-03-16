@@ -1,5 +1,6 @@
 import { ReactNode, FC, useEffect, useState } from 'react';
 import { addTodo, deleteTodo, getTodos, updateTodo } from '../../api';
+import { DataType } from '../../components/Form';
 import { TodoContext } from './context';
 
 export interface TodoProviderProps {
@@ -16,6 +17,7 @@ export const TodoProvider: FC<TodoProviderProps> = ({ children }) => {
             .then(({ data: { todos }}) => {
                 setData(todos)})
             .catch((err) => console.log(err));
+        console.log(data)
     }, [getTodos]);
 
     const updateTask = (form: any) => {
@@ -32,14 +34,17 @@ export const TodoProvider: FC<TodoProviderProps> = ({ children }) => {
             })
     }
 
-    const addTask = (form: any) => {
+    const addTask = (form: DataType) => {
+        console.log('adding task...')
         addTodo(form)
             .then(({ status, data }) => {
                 if (status !== 200) {
                 console.log("Failed to add");
                 };
+                console.log('added task.')
                 setData(data.todos);
             })
+        
     }
 
     const value =  {

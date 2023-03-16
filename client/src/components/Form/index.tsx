@@ -3,10 +3,21 @@ import { dateRegex } from '../../constants/types';
 import { getEditableTask } from '../../helpers/tasks';
 import { useTodoContext } from '../../hooks/useTodoContext';
 
+export interface DataType {
+  title: String;
+  description: String;
+  completed: Boolean;
+  date: String;
+  editing: Boolean;
+  _id?: String;
+}
+
 export const Form = ({ isEditing }: any) => {
-  const { tasks, updateTodo, addTodo } = useTodoContext();
+  const { tasks, updateTask, addTask } = useTodoContext();
   console.log(tasks);
     const changeTask = getEditableTask(tasks);
+
+    //clear values?
   const {
     register,
     handleSubmit,
@@ -24,26 +35,26 @@ export const Form = ({ isEditing }: any) => {
 
   const handleSubmission = (data: any) => {
     // Change these once db is updated to reflect modal attributes.
-    const addData = {...data, completed: false, status: false, editing: false};
-    const editData = {...data, completed: false, status: false, editing: false}
-    console.log(addData)
+    const addData: DataType = {...data, completed: false, editing: false};
+    const editData: DataType = {...data, completed: false, editing: false, _id: changeTask._id}
+    console.log(editData)
     // check if task is true then instead of addtask just edit task
-    // changeTask ? updateTodo(editData) : addTodo(addData);
+    changeTask ? updateTask(editData) : addTask(addData);
   }
 // we can use ternaries to check if there is a task with status true then put 
 // those values as placeholders 
   return (
     <form onSubmit={handleSubmit((data) => handleSubmission(data))}>
         <label>Title</label>
-      <input defaultValue={changeTask ? changeTask.title : ''} {...register('title', formOptions.title)} />
+      <input defaultValue={changeTask ? changeTask.title : ' y'} {...register('title', formOptions.title)} />
       <>
         { errors?.title && errors.title?.message }
       </>
       <label>Description</label>
-      <input defaultValue={changeTask ? changeTask.description : ''} placeholder='description' {...register('description', formOptions.description)} />
+      <input defaultValue={changeTask ? changeTask.description : ' '} placeholder='description' {...register('description', formOptions.description)} />
       <label>Due by:</label>
       {/* Need to fix limit => date in server, and to format date */}
-      <input defaultValue={changeTask ? changeTask.limit : ''} placeholder='date' {...register('date', formOptions.date)} />
+      <input defaultValue={changeTask ? changeTask.limit : ' '} placeholder='date' {...register('date', formOptions.date)} />
       <>
         { errors?.date && errors.date?.message }
       </>

@@ -18,8 +18,9 @@ export const addTodo = async (formData: any): Promise<AxiosResponse<any>> => {
         const todo = {
             title: formData.title,
             description: formData.description,
-            status: false,
-            limit: formData.limit
+            completed: false,
+            date: formData.date,
+            editing: false,
         };
 
         const saveTodo = await axios.post(baseUrl + '/add-todo', todo);
@@ -33,9 +34,9 @@ export const addTodo = async (formData: any): Promise<AxiosResponse<any>> => {
 // will need to change this to include editing the description
 export const updateTodo = async (todo: any): Promise<AxiosResponse<any>> => {
     try {
-        const todoUpdate = { status: true }
+        // const todoUpdate = { status: true }
 
-        const updatedTodo = await axios.put(baseUrl + '/add-todo/' + todo._id, todoUpdate);
+        const updatedTodo = await axios.put(baseUrl + '/edit-todo/' + todo._id, todo);
 
         return updatedTodo;
     } catch (err) {
