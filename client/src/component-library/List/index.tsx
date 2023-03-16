@@ -6,7 +6,7 @@ import Show from '../Functional/Show';
 import { Card, CardDescription, CardHeader, DueDate, ListWrapper } from './styled'
 
 export const Item = ({ item }: any) => {
-  const { deleteTask } = useTodoContext();
+  const { deleteTask, updateTodo } = useTodoContext();
   const [open, isOpen] = useState(false);
 
   return (
@@ -19,7 +19,7 @@ export const Item = ({ item }: any) => {
         <div style={{ display: 'flex'}}>
         <OptionsButton color="red" onClick={() => deleteTask(item._id)}>Delete</OptionsButton>
         {/* For handleEdit we'll just want to update status to be true */}
-        <OptionsButton onClick={() => deleteTask(item._id)}>Edit</OptionsButton>
+        <OptionsButton onClick={() => updateTodo(item)}>Edit</OptionsButton>
         <OptionsButton color='blue' onClick={() => deleteTask(item._id)}>Completed</OptionsButton>
         </div>
         </Show>

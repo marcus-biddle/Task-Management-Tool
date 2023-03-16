@@ -4,7 +4,7 @@ import { getEditableTask } from '../../helpers/tasks';
 import { useTodoContext } from '../../hooks/useTodoContext';
 
 export const Form = ({ isEditing }: any) => {
-  const { tasks, editTodo, addTodo } = useTodoContext();
+  const { tasks, updateTodo, addTodo } = useTodoContext();
   console.log(tasks);
     const changeTask = getEditableTask(tasks);
   const {
@@ -28,7 +28,7 @@ export const Form = ({ isEditing }: any) => {
     const editData = {...data, completed: false, status: false, editing: false}
     console.log(addData)
     // check if task is true then instead of addtask just edit task
-    changeTask ? editTodo(editData) : addTodo(addData);
+    // changeTask ? updateTodo(editData) : addTodo(addData);
   }
 // we can use ternaries to check if there is a task with status true then put 
 // those values as placeholders 
