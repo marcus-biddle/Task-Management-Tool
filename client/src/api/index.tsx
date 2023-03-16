@@ -37,6 +37,7 @@ export const updateTodo = async (todo: any): Promise<AxiosResponse<any>> => {
         // const todoUpdate = { status: true }
 
         const updatedTodo = await axios.put(baseUrl + '/edit-todo/' + todo._id, todo);
+        console.log(todo._id);
 
         return updatedTodo;
     } catch (err) {

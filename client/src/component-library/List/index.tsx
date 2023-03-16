@@ -12,6 +12,7 @@ export const Item = ({ item }: any) => {
   const handleEdit = () => {
     const data = {...item, editing: true};
     updateTask(data);
+    console.log('handle', data);
   }
 
   return (

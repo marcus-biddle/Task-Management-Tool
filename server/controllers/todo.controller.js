@@ -32,7 +32,7 @@ const addTodo = async (req, res) => {
 
 const updateTodo = async (req, res) => {
     try {
-        const { _id, title, description, completed, date, editing } = req.body;
+        const { _id, body } = req.body;
         const updateTodo = await Todo.findByIdAndUpdate( { _id: _id }, body);
         const allTodos = await Todo.find();
 
