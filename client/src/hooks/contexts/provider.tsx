@@ -1,5 +1,5 @@
 import { ReactNode, FC, useEffect, useState } from 'react';
-import { addTodo, deleteTodo, getTodos } from '../../api';
+import { addTodo, deleteTodo, getTodos, updateTodo } from '../../api';
 import { TodoContext } from './context';
 
 export interface TodoProviderProps {
@@ -17,6 +17,13 @@ export const TodoProvider: FC<TodoProviderProps> = ({ children }) => {
                 setData(todos)})
             .catch((err) => console.log(err));
     }, [getTodos]);
+
+    const updateTask = (form: any) => {
+        updateTodo(form)
+            .then(({ data }: any) => {
+                setData(data.todos);
+            })
+    }
     
     const deleteTask = (_id: number) => {
         deleteTodo(_id)
@@ -38,7 +45,8 @@ export const TodoProvider: FC<TodoProviderProps> = ({ children }) => {
     const value =  {
         tasks: data,
         deleteTask,
-        addTask
+        addTask,
+        updateTask
     }
 
     return (
