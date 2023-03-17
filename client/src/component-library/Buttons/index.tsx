@@ -17,7 +17,6 @@ export const OptionsButton = styled.div`
 `;
 
 export const SubmitButton = styled.button`
-    border-radius: 5px;
-    font-family: 'Bebas Neue', cursive;
-    font-size: 1.15rem;
+    width: 16rem;
+    height: 1.5rem;
 `;

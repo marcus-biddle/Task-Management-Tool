@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { SubmitButton } from '../../component-library/Buttons';
+import { ButtonWrapper, Error, Input, InputContainer, InputWrapper, Label, StyledForm } from '../../component-library/Forms';
 import { DataType, dateRegex } from '../../constants/types';
 import { useTodoContext } from '../../hooks/useTodoContext';
 
@@ -17,7 +19,7 @@ export const Form = ({ isEditing }: any) => {
 
   const formOptions = {
     title: { required: "Title is required" },
-    description: { required: false },
+    description: { required: "Description is required" },
     date: { required: "Date is required", pattern: {
         value: dateRegex,
         message: "Format date as MM/DD/YYYY"
@@ -51,22 +53,44 @@ export const Form = ({ isEditing }: any) => {
 
     }
   }, [isEditing, setValue])
-
+// TODO: move errors into own row
   return (
-    <form onSubmit={handleSubmit((data) => handleSubmission(data))}>
-        <label>Title</label>
-      <input placeholder='Add a title' {...register('title', formOptions.title)} />
-      <>
-        { errors?.title && errors.title?.message }
-      </>
-      <label>Description</label>
-      <input placeholder='Add a description' {...register('description', formOptions.description)} />
-      <label>Due by:</label>
-      <input placeholder='MM/DD/YYYY' {...register('date', formOptions.date)} />
-      <>
-        { errors?.date && errors.date?.message }
-      </>
-      <input type="submit" />
-    </form>
+    <StyledForm onSubmit={handleSubmit((data) => handleSubmission(data))}>
+      <InputWrapper>
+        <InputContainer>
+          <Label>Title:</Label>
+          <Input placeholder='Add a title' {...register('title', formOptions.title)} />
+          <Error>
+          <>
+            { errors?.title && errors.title?.message }
+          </>
+          </Error>
+          
+        </InputContainer>
+        <InputContainer>
+          <Label>Description:</Label>
+          <Input placeholder='Add a description' {...register('description', formOptions.description)} />
+          <Error>
+            <>
+              { errors?.description && errors.description?.message }
+            </>
+          </Error>
+        </InputContainer>
+        <InputContainer>
+          <Label>Due by:</Label>
+          <Input dateInput={true} placeholder='MM/DD/YYYY' {...register('date', formOptions.date)} />
+          <Error>
+            <>
+              { errors?.date && errors.date?.message }
+            </>
+          </Error>
+        </InputContainer>
+      </InputWrapper>
+      
+      <ButtonWrapper>
+        <SubmitButton type="submit">Submit</SubmitButton>
+      </ButtonWrapper>
+      
+    </StyledForm>
   );
 }

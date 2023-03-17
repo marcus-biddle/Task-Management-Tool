@@ -9,13 +9,14 @@ export const ListWrapper = styled.div`
     margin-right: 2rem;
 `;
 
-export const CardHeader = styled.div`
+export const CardHeader = styled.div<CardProps>`
     text-transform: uppercase;
     font-family: 'Bebas Neue', cursive;
     font-size: 1.677rem
     letter-spacing: 1.755px;
     padding-left: 1rem;
     padding-top: .333rem;
+    text-decoration: ${props => props.completed ? 'line-through' : 'none'};
 `;
 
 export const CardDescription = styled.p`
@@ -40,7 +41,6 @@ export const Card = styled.div<CardProps>`
     background-color: rgba(0, 0, 0, 0.822);
     color: white;
     border: solid black;
-    text-decoration: ${props => props.completed ? 'line-through' : 'none'};
     opacity: ${props => props.completed ? '.75' : '1'};
 `;
 

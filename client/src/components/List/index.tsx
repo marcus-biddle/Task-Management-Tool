@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { getDate } from '../../helpers/conditionals';
+import { useDate } from '../../helpers/conditionals';
 import { useTodoContext } from '../../hooks/useTodoContext';
 import { OptionsButton } from '../../component-library/Buttons';
 import Show from '../../component-library/Functional/Show';
@@ -25,10 +25,10 @@ export const Item = ({ item }: any) => {
   return (
     <Card completed={item.completed} onClick={() => isOpen(!open)}>
       <div style={{ display: 'flex', justifyContent: 'space-between'}}>
-        <CardHeader>
+        <CardHeader completed={item.completed}>
           {item.title}
         </CardHeader>
-
+{/* Fix colors styled components */}
         <Show when={open}>
           <div style={{ display: 'flex'}}>
             <OptionsButton color="red" onClick={() => deleteTask(item._id)}>Delete</OptionsButton>
@@ -37,12 +37,12 @@ export const Item = ({ item }: any) => {
               <OptionsButton onClick={handleEdit}>Edit</OptionsButton>
             </Show>
             
-            <OptionsButton color='blue' onClick={handleComplete}>Completed</OptionsButton>
+            <OptionsButton color='blue' onClick={handleComplete}>{item.completed ? 'Undo' : 'Complete'}</OptionsButton>
           </div>
         </Show>
 
         <Show when={!open && !item.completed}>
-          <DueDate>{getDate(item.date)}</DueDate>
+          <DueDate>{useDate(item.date)}</DueDate>
         </Show>
       </div>
       
