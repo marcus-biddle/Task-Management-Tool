@@ -10,7 +10,16 @@ export const ListWrapper = styled.div`
     margin-right: 2rem;
 `;
 
-export const CardHeader = styled.div<CardProps>`
+export const CardHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+
+  @media (max-width: 565px) {
+        flex-direction: column;
+    };
+`;
+
+export const CardTitle = styled.div<CardProps>`
     width: 78%;
     cursor: pointer;
     text-transform: uppercase;
@@ -52,5 +61,16 @@ export const DueDate = styled.div`
     &::before {
         color: grey;
         content: "Finish by: ";
+    };
+
+    @media (max-width: 1129px) {
+        display: flex;
+        justify-content: end;
     }
 `;
+
+export const CardOptions = styled.div`
+    display: flex;
+    padding-top: 5px;
+    justify-content: center;
+`

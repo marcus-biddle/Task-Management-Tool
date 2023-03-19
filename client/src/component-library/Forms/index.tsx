@@ -20,6 +20,11 @@ export const StyledForm = styled.form`
 export const InputWrapper = styled.div`
     display: flex;
     justify-content: space-between;
+
+    @media (max-width: 1129px) {
+        display: flex;
+        flex-direction: column;
+    }
 `;
 
 export const InputContainer = styled.div`
@@ -30,6 +35,10 @@ export const Input = styled.input<InputProps>`
     padding-left: .277rem;
     padding-top: 2px;
     width: ${props => props.dateInput ? '' : '25rem'};
+
+    @media (max-width: 1129px) {
+        width: 100%;
+    }
 `;
 
 export const Label = styled.label`

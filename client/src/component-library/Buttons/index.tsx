@@ -37,5 +37,9 @@ export const SubmitButton = styled.button<ButtonProps>`
     &:hover {
         cursor: pointer;
         background-color: ${props => props.editMode ? 'rgba(86, 205, 113, 0.76)' : 'rgba(86, 190, 205)'};
+    };
+
+    @media (max-width: 1129px) {
+        background-color: ${props => props.editMode ? colors.EDIT : colors.COMPLETE};
     }
 `;

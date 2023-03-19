@@ -3,7 +3,7 @@ import { checkIfTrue, useDate } from '../../helpers/conditionals';
 import { useTodoContext } from '../../hooks/useTodoContext';
 import { OptionsButton } from '../../component-library/Buttons';
 import Show from '../../component-library/Functional/Show';
-import { Card, CardDescription, CardHeader, DueDate, ListWrapper } from './styled';
+import { Card, CardDescription, CardHeader, CardOptions, CardTitle, DueDate, ListWrapper } from './styled';
 import { checkEditMode } from '../../helpers/tasks';
 
 export const Item = ({ item }: any) => {
@@ -27,13 +27,13 @@ export const Item = ({ item }: any) => {
 
   return (
     <Card completed={item.completed} >
-      <div style={{ display: 'flex', justifyContent: 'space-between'}}>
-        <CardHeader completed={item.completed} onClick={() => isOpen(!open)}>
+      <CardHeader>
+        <CardTitle completed={item.completed} onClick={() => isOpen(!open)}>
           {item.title}
-        </CardHeader>
+        </CardTitle>
 {/* Fix colors styled components */}
         <Show when={editMode ? false : open}>
-          <div style={{ display: 'flex'}}>
+          <CardOptions>
             <OptionsButton option='delete' onClick={() => deleteTask(item._id)}>Delete</OptionsButton>
 
             <Show when={!item.completed}>
@@ -41,13 +41,13 @@ export const Item = ({ item }: any) => {
             </Show>
             
             <OptionsButton option='complete' onClick={handleComplete}>{item.completed ? 'Undo' : 'Complete'}</OptionsButton>
-          </div>
+          </CardOptions>
         </Show>
 
         <Show when={!open && !item.completed}>
           <DueDate>{useDate(item.date)}</DueDate>
         </Show>
-      </div>
+      </CardHeader>
       
       <Show when={open && !item.completed}>
         <CardDescription>{item.description}</CardDescription>
