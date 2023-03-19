@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { colors } from "../../../constants/colors";
 
 interface CardProps {
     completed: boolean;
@@ -10,6 +11,8 @@ export const ListWrapper = styled.div`
 `;
 
 export const CardHeader = styled.div<CardProps>`
+    width: 78%;
+    cursor: pointer;
     text-transform: uppercase;
     font-family: 'Bebas Neue', cursive;
     font-size: 1.677rem
@@ -29,14 +32,13 @@ export const CardDescription = styled.p`
     font-size: 15px;
     &::before {
         font-family: cursive;
-        color: orange;
+        color: ${colors.ALERT};
         content: "Description: ";
         font-size: 20px;
     }
 `;
 
 export const Card = styled.div<CardProps>`
-    cursor: pointer;
     margin-bottom: .455rem;
     background-color: rgba(0, 0, 0, 0.822);
     color: white;

@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { colors } from "../../constants/colors";
 
 export interface InputProps {
     dateInput?: Boolean;
@@ -10,6 +11,10 @@ export const StyledForm = styled.form`
     margin-bottom: 4rem;
     padding-left: 2rem;
     padding-right: 2rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    border: thick double rgba(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.3);
 `;
 
 export const InputWrapper = styled.div`
@@ -34,10 +39,14 @@ export const Label = styled.label`
 `;
 
 export const Error = styled.div`
+    height: 20px;
     font-size: 15px;
     font-weight: bolder;
     letter-spacing: 1.5px;
     text-transform: uppercase;
+    color: ${colors.ALERT};
+    display: flex;
+    justify-content: space-evenly;
 `;
 
 export const ButtonWrapper = styled.div`

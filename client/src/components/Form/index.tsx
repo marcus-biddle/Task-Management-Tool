@@ -1,8 +1,10 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { SubmitButton } from '../../component-library/Buttons';
+import { ErrorMessage } from '../../component-library/Error';
 import { ButtonWrapper, Error, Input, InputContainer, InputWrapper, Label, StyledForm } from '../../component-library/Forms';
-import { DataType, dateRegex } from '../../constants/types';
+import { DataType, dateRegex, textRegex } from '../../constants/types';
+import { checkIfTrue, showIfOrElse } from '../../helpers/conditionals';
 import { useTodoContext } from '../../hooks/useTodoContext';
 
 //TODO: styled components.
@@ -18,11 +20,17 @@ export const Form = ({ isEditing }: any) => {
   } = useForm();
 
   const formOptions = {
-    title: { required: "Title is required" },
-    description: { required: "Description is required" },
+    title: { required: "Title is required", pattern: {
+      value: textRegex,
+      message: "Letters and Numbers only"
+    } },
+    description: { required: "Description is required", pattern: {
+      value: textRegex,
+      message: "Letters and Numbers only"
+    } },
     date: { required: "Date is required", pattern: {
         value: dateRegex,
-        message: "Format date as MM/DD/YYYY"
+        message: "Format MM/DD/YYYY"
     }},
   }
 
@@ -60,35 +68,22 @@ export const Form = ({ isEditing }: any) => {
         <InputContainer>
           <Label>Title:</Label>
           <Input placeholder='Add a title' {...register('title', formOptions.title)} />
-          <Error>
-          <>
-            { errors?.title && errors.title?.message }
-          </>
-          </Error>
-          
+          <ErrorMessage errors={errors?.title && errors.title?.message} />
         </InputContainer>
         <InputContainer>
           <Label>Description:</Label>
           <Input placeholder='Add a description' {...register('description', formOptions.description)} />
-          <Error>
-            <>
-              { errors?.description && errors.description?.message }
-            </>
-          </Error>
+          <ErrorMessage errors={errors?.description && errors.description?.message} />
         </InputContainer>
         <InputContainer>
           <Label>Due by:</Label>
           <Input dateInput={true} placeholder='MM/DD/YYYY' {...register('date', formOptions.date)} />
-          <Error>
-            <>
-              { errors?.date && errors.date?.message }
-            </>
-          </Error>
+          <ErrorMessage errors={errors?.date && errors.date?.message} />
         </InputContainer>
       </InputWrapper>
       
       <ButtonWrapper>
-        <SubmitButton type="submit">Submit</SubmitButton>
+        <SubmitButton editMode={checkIfTrue(isEditing)} type="submit">{isEditing ? 'Edit task' : 'Add task'}</SubmitButton>
       </ButtonWrapper>
       
     </StyledForm>

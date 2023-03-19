@@ -1,14 +1,16 @@
 import React, { useState } from 'react'
-import { useDate } from '../../helpers/conditionals';
+import { checkIfTrue, useDate } from '../../helpers/conditionals';
 import { useTodoContext } from '../../hooks/useTodoContext';
 import { OptionsButton } from '../../component-library/Buttons';
 import Show from '../../component-library/Functional/Show';
 import { Card, CardDescription, CardHeader, DueDate, ListWrapper } from './styled';
+import { checkEditMode } from '../../helpers/tasks';
 
 export const Item = ({ item }: any) => {
-  const { deleteTask, updateTask } = useTodoContext();
+  const { tasks, deleteTask, updateTask } = useTodoContext();
   const [open, isOpen] = useState(false);
   const [completed, setCompleted] = useState(false);
+  const editMode = checkEditMode(tasks)
 
   const handleEdit = () => {
     const data = {...item, editing: true};
@@ -20,24 +22,25 @@ export const Item = ({ item }: any) => {
     updateTask(data);
     console.log('completed', data);
     setCompleted(!completed);
+    isOpen(false);
   }
 
   return (
-    <Card completed={item.completed} onClick={() => isOpen(!open)}>
+    <Card completed={item.completed} >
       <div style={{ display: 'flex', justifyContent: 'space-between'}}>
-        <CardHeader completed={item.completed}>
+        <CardHeader completed={item.completed} onClick={() => isOpen(!open)}>
           {item.title}
         </CardHeader>
 {/* Fix colors styled components */}
-        <Show when={open}>
+        <Show when={editMode ? false : open}>
           <div style={{ display: 'flex'}}>
-            <OptionsButton color="red" onClick={() => deleteTask(item._id)}>Delete</OptionsButton>
-            
+            <OptionsButton option='delete' onClick={() => deleteTask(item._id)}>Delete</OptionsButton>
+
             <Show when={!item.completed}>
-              <OptionsButton onClick={handleEdit}>Edit</OptionsButton>
+                <OptionsButton option='edit' onClick={handleEdit}>Edit</OptionsButton>
             </Show>
             
-            <OptionsButton color='blue' onClick={handleComplete}>{item.completed ? 'Undo' : 'Complete'}</OptionsButton>
+            <OptionsButton option='complete' onClick={handleComplete}>{item.completed ? 'Undo' : 'Complete'}</OptionsButton>
           </div>
         </Show>
 
