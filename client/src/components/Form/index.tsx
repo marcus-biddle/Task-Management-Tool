@@ -93,7 +93,7 @@ export const Form = ({ isEditing }: any) => {
               <DatePicker
                 placeholderText='Select date'
                 onChange={(date) => field.onChange(date)}
-                selected={field.value}
+                selected={isEditing? new Date(isEditing.date) : field.value}
                 minDate={new Date()}
               />
             )}
