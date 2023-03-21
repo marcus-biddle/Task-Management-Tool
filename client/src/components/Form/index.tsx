@@ -1,19 +1,25 @@
-import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { useEffect, useState } from 'react';
+import { useForm, Controller } from 'react-hook-form';
 import { SubmitButton } from '../../component-library/Buttons';
 import { ErrorMessage } from '../../component-library/Error';
 import { ButtonWrapper, Input, InputContainer, InputWrapper, Label, StyledForm } from '../../component-library/Forms';
+import Show from '../../component-library/Functional/Show';
 import { DataType, dateRegex, textRegex } from '../../constants/types';
 import { checkIfTrue } from '../../helpers/conditionals';
 import { useTodoContext } from '../../hooks/useTodoContext';
+import DatePicker from 'react-datepicker';
+
+import "react-datepicker/dist/react-datepicker.css";
 
 export const Form = ({ isEditing }: any) => {
   const { updateTask, addTask } = useTodoContext();
+  const [cancelled, isCancelled] = useState(false);
   const {
     register,
     handleSubmit,
     resetField,
     setValue,
+    control,
     formState: { errors },
   } = useForm();
 
@@ -39,11 +45,16 @@ export const Form = ({ isEditing }: any) => {
   }
 
   const handleSubmission = (data: DataType) => {
+    console.log('Submit')
+    console.log(data);
     const addData: DataType = {...data, completed: false, editing: false};
-    const editData: DataType = {...data, completed: false, editing: false, _id: isEditing._id}
+    const editData: DataType = {...data, completed: false, editing: false, _id: isEditing._id};
+    const cancelledData: DataType = {...isEditing, editing: false}; 
+    cancelled 
+    ? 
+    updateTask(cancelledData) :
     isEditing ? updateTask(editData) : addTask(addData);
     customReset();
-    console.log(addData);
   }
 
   useEffect(() => {
@@ -59,7 +70,7 @@ export const Form = ({ isEditing }: any) => {
 
     }
   }, [isEditing, setValue])
-// TODO: move errors into own row
+
   return (
     <StyledForm onSubmit={handleSubmit((data: any) => handleSubmission(data))}>
       <InputWrapper>
@@ -75,13 +86,28 @@ export const Form = ({ isEditing }: any) => {
         </InputContainer>
         <InputContainer>
           <Label>Due by:</Label>
-          <Input dateInput={true} placeholder='MM/DD/YYYY' {...register('date', formOptions.date)} />
+          <Controller
+            control={control}
+            name='date'
+            render={({ field }: any) => (
+              <DatePicker
+                placeholderText='Select date'
+                onChange={(date) => field.onChange(date)}
+                selected={field.value}
+                minDate={new Date()}
+              />
+            )}
+            
+          />
           <ErrorMessage errors={errors?.date && errors.date?.message} />
         </InputContainer>
       </InputWrapper>
       
       <ButtonWrapper>
         <SubmitButton editMode={checkIfTrue(isEditing)} type="submit">{isEditing ? 'Edit task' : 'Add task'}</SubmitButton>
+        <Show when={checkIfTrue(isEditing)}>
+        <SubmitButton color='red' editMode={checkIfTrue(isEditing)} onClick={() => isCancelled(true)}>Cancel</SubmitButton>
+        </Show>
       </ButtonWrapper>
       
     </StyledForm>

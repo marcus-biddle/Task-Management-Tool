@@ -31,7 +31,7 @@ export const Item = ({ item }: any) => {
         <CardTitle completed={item.completed} onClick={() => isOpen(!open)}>
           {item.title}
         </CardTitle>
-        
+
         <Show when={editMode ? false : open}>
           <CardOptions>
             <OptionsButton option='delete' onClick={() => deleteTask(item._id)}>Delete</OptionsButton>
@@ -45,7 +45,7 @@ export const Item = ({ item }: any) => {
         </Show>
 
         <Show when={!open && !item.completed}>
-          <DueDate>{useDate(item.date)}</DueDate>
+          <DueDate>{' '}{useDate(item.date)}</DueDate>
         </Show>
       </CardHeader>
       

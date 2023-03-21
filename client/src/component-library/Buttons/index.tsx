@@ -36,10 +36,10 @@ export const SubmitButton = styled.button<ButtonProps>`
 
     &:hover {
         cursor: pointer;
-        background-color: ${props => props.editMode ? 'rgba(86, 205, 113, 0.76)' : 'rgba(86, 190, 205)'};
+        background-color: ${props => props.editMode ? props.color === 'red' ? colors.DELETE : colors.EDIT : colors.COMPLETE};
     };
 
     @media (max-width: 1129px) {
-        background-color: ${props => props.editMode ? colors.EDIT : colors.COMPLETE};
+        background-color: ${props => props.editMode ? props.color === 'red' ? colors.DELETE : colors.EDIT : colors.COMPLETE};
     }
 `;

@@ -61,6 +61,7 @@ export const DueDate = styled.div`
     &::before {
         color: grey;
         content: "Finish by: ";
+        padding-right: 5px;
     };
 
     @media (max-width: 1129px) {
