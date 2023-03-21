@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { checkIfTrue, useDate } from '../../helpers/conditionals';
+import { useState } from 'react'
+import { useDate } from '../../helpers/conditionals';
 import { useTodoContext } from '../../hooks/useTodoContext';
 import { OptionsButton } from '../../component-library/Buttons';
 import Show from '../../component-library/Functional/Show';
@@ -31,7 +31,7 @@ export const Item = ({ item }: any) => {
         <CardTitle completed={item.completed} onClick={() => isOpen(!open)}>
           {item.title}
         </CardTitle>
-{/* Fix colors styled components */}
+        
         <Show when={editMode ? false : open}>
           <CardOptions>
             <OptionsButton option='delete' onClick={() => deleteTask(item._id)}>Delete</OptionsButton>

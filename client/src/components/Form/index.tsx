@@ -2,12 +2,10 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { SubmitButton } from '../../component-library/Buttons';
 import { ErrorMessage } from '../../component-library/Error';
-import { ButtonWrapper, Error, Input, InputContainer, InputWrapper, Label, StyledForm } from '../../component-library/Forms';
+import { ButtonWrapper, Input, InputContainer, InputWrapper, Label, StyledForm } from '../../component-library/Forms';
 import { DataType, dateRegex, textRegex } from '../../constants/types';
-import { checkIfTrue, showIfOrElse } from '../../helpers/conditionals';
+import { checkIfTrue } from '../../helpers/conditionals';
 import { useTodoContext } from '../../hooks/useTodoContext';
-
-//TODO: styled components.
 
 export const Form = ({ isEditing }: any) => {
   const { updateTask, addTask } = useTodoContext();
@@ -40,7 +38,7 @@ export const Form = ({ isEditing }: any) => {
     resetField('date');
   }
 
-  const handleSubmission = (data: any) => {
+  const handleSubmission = (data: DataType) => {
     const addData: DataType = {...data, completed: false, editing: false};
     const editData: DataType = {...data, completed: false, editing: false, _id: isEditing._id}
     isEditing ? updateTask(editData) : addTask(addData);
@@ -63,7 +61,7 @@ export const Form = ({ isEditing }: any) => {
   }, [isEditing, setValue])
 // TODO: move errors into own row
   return (
-    <StyledForm onSubmit={handleSubmit((data) => handleSubmission(data))}>
+    <StyledForm onSubmit={handleSubmit((data: any) => handleSubmission(data))}>
       <InputWrapper>
         <InputContainer>
           <Label>Title:</Label>
