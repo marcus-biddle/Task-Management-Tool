@@ -15,10 +15,10 @@ const addTask = async (req, res) => {
         const { _id, description, userId, serverId } = req.body;
 
         const task = new Task({
-            _id: _id,
+            _id: mongoose.Types.ObjectId(_id),
             description: description,
             userId: userId,
-            serverId: serverId,
+            serverId: mongoose.Types.ObjectId(serverId),
         })
 
         const newTask = await task.save();
