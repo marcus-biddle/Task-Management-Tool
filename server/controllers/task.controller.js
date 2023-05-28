@@ -22,7 +22,7 @@ const addTask = async (req, res) => {
         })
 
         const newTask = await task.save();
-        const allTasksInServer = await Task.find({ server: serverId });
+        const allTasksInServer = await Task.find({ serverId: serverId });
 
         res.status(200).json({ message: 'task added', task: newTask, tasks: allTasksInServer })
     } catch (err) {
