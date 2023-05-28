@@ -11,6 +11,7 @@ import { Server } from './pages/Server';
 import { Sidebar } from './components/Sidebar';
 import { ErrorPage } from './components/Error';
 import { ServerProvider } from './hooks/contexts/ServerContext';
+import { TaskProvider } from './hooks/contexts/TaskContext';
 
 const router = createBrowserRouter([
   {
@@ -35,6 +36,8 @@ const root = ReactDOM.createRoot(
 );
 root.render(
     <ServerProvider>
-      <RouterProvider router={router} />
+      <TaskProvider>
+        <RouterProvider router={router} />
+      </TaskProvider>
     </ServerProvider> 
 );

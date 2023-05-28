@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useServerContext } from '../../hooks/contexts/ServerContext';
 import { useParams } from 'react-router';
+import { useTaskContext } from '../../hooks/contexts/TaskContext';
 
 const Container = styled.div`
   display: flex;
@@ -113,6 +114,7 @@ const EditButton = styled.button`
 
 export const Server: React.FC = () => {
   const { getServer } = useServerContext();
+  const { tasks, fetchTasks, updateTask, addTask } = useTaskContext();
   const { id } = useParams();
   const _id: string = id ? id : '';
   console.log(_id, id);
@@ -132,7 +134,10 @@ export const Server: React.FC = () => {
       }
     };
 
+    
     fetchServer();
+    fetchTasks(_id)
+    console.log(tasks);
   }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -143,13 +148,15 @@ export const Server: React.FC = () => {
     if (task.trim() !== '') {
       if (editIndex !== null) {
         // Editing existing task
-        const updatedTaskList = [...taskList];
-        updatedTaskList[editIndex] = task;
-        setTaskList(updatedTaskList);
+        // updateTask();
+        // const updatedTaskList = [...taskList];
+        // updatedTaskList[editIndex] = task;
+        // setTaskList(updatedTaskList);
         setEditIndex(null);
       } else {
         // Adding new task
-        setTaskList([...taskList, task]);
+        addTask({description: task, serverId: _id, userId: ''});
+        // setTaskList([...taskList, task]);
       }
       setTask('');
     }
@@ -175,7 +182,7 @@ export const Server: React.FC = () => {
 
   return (
     <Container>
-      <Title>{server}</Title>
+      <Title>{server.title}</Title>
       <InputContainer>
         <TaskInput
           type="text"
@@ -186,23 +193,27 @@ export const Server: React.FC = () => {
         <AddButton onClick={handleAddTask}>{editIndex !== null ? 'Save' : 'Add'}</AddButton>
       </InputContainer>
       <TaskList>
-        {taskList.map((task, index) => (
-          <TaskItem key={index}>
-            <TaskContent>
-              <TaskText>{task}</TaskText>
-              <EditButton onClick={() => handleEditTask(index)}>Edit</EditButton>
-              <DeleteButton onClick={() => handleDeleteTask(index)}>Delete</DeleteButton>
-            </TaskContent>
-            <TaskInfo>
-              <span>
-                Author: John Doe
-              </span>
-              <span>
-                {' '}at 10:00 AM
-              </span>
-            </TaskInfo>
+        {tasks.length > 0 ? tasks.map((task, index) => {
+          return (
+            <TaskItem key={index}>
+              <TaskContent>
+                <TaskText>{task.description}</TaskText>
+                <EditButton onClick={() => handleEditTask(index)}>Edit</EditButton>
+                <DeleteButton onClick={() => handleDeleteTask(index)}>Delete</DeleteButton>
+              </TaskContent>
+              <TaskInfo>
+                <span>
+                  Author: John Doe
+                </span>
+                <span>
+                  {' '}at 10:00 AM
+                </span>
+              </TaskInfo>
           </TaskItem>
-        ))}
+          )
+        })
+      :
+      ''}
       </TaskList>
     </Container>
   );

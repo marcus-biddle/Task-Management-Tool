@@ -60,7 +60,7 @@ export const Sidebar = () => {
                           {servers.map((server, index) => {
                             return (
                               <li key={index}>
-                                <Link to={`servers/${server._id}`}>Server: {server._id}</Link>
+                                <Link to={`servers/${server._id}`}>Server: {server.title}</Link>
                               </li>
                             )
                           })}

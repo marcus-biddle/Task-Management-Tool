@@ -1,20 +1,12 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
-import { getTasks, addTask, updateTask, deleteTask } from '../../api/taskApi';
-
-interface Task {
-    _id: string;
-    title: string;
-    description: string;
-    completed: boolean;
-    date: string;
-    editing: boolean;
-}
+import { getTasks, addTask, updateTask, deleteTask, Task } from '../../api/taskApi';
 
 interface TaskContextType {
   tasks: Task[];
   addTask: (formData: Task) => Promise<void>;
   updateTask: (task: Task) => Promise<void>;
   deleteTask: (_id: string) => Promise<void>;
+  fetchTasks: (serverId: string) => Promise<void>;
 }
 
 const TaskContext = createContext<TaskContextType | undefined>(undefined);
@@ -23,17 +15,17 @@ export const TaskProvider: React.FC<React.PropsWithChildren<{}>> = ({ children }
   const [tasks, setTasks] = useState<Task[]>([]);
 
   useEffect(() => {
-    const fetchTasks = async () => {
-      try {
-        const response = await getTasks();
-        setTasks(response.data);
-      } catch (error) {
-        console.error('Error fetching tasks:', error);
-      }
-    };
-
-    fetchTasks();
+    fetchTasks('');
   }, []);
+
+  const fetchTasks = async (serverId: string) => {
+    try {
+      const response = await getTasks(serverId);
+      setTasks(response.data);
+    } catch (error) {
+      console.error('Error fetching tasks:', error);
+    }
+  };
 
   const handleAddTask = async (formData: Task) => {
     try {
@@ -72,6 +64,7 @@ export const TaskProvider: React.FC<React.PropsWithChildren<{}>> = ({ children }
     addTask: handleAddTask,
     updateTask: handleUpdateTask,
     deleteTask: handleDeleteTask,
+    fetchTasks,
   };
 
   return (

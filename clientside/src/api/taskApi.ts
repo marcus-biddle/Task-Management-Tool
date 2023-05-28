@@ -1,19 +1,18 @@
 import axios, { AxiosResponse } from 'axios';
+import { v4 as uuidv4 } from 'uuid';
 
 const baseUrl: string = 'https://mongodb-server-6t4m.onrender.com/api';
 
-interface Task {
-  _id: string;
-  title: string;
+export interface Task {
+  _id?: string;
   description: string;
-  completed: boolean;
-  date: string;
-  editing: boolean;
+  serverId: string;
+  userId: string;
 }
 
-export const getTasks = async (): Promise<AxiosResponse<Task[]>> => {
+export const getTasks = async (serverId: string): Promise<AxiosResponse<Task[]>> => {
   try {
-    const tasks: AxiosResponse<Task[]> = await axios.get(`${baseUrl}/tasks`);
+    const tasks: AxiosResponse<Task[]> = await axios.get(`${baseUrl}/tasks?serverId=${serverId}`);
     return tasks;
   } catch (error) {
     throw new Error("Failed to fetch tasks");
@@ -23,11 +22,10 @@ export const getTasks = async (): Promise<AxiosResponse<Task[]>> => {
 export const addTask = async (formData: Task): Promise<AxiosResponse<Task>> => {
   try {
     const task = {
-      title: formData.title,
+      _id: uuidv4(),
       description: formData.description,
-      completed: false,
-      date: formData.date,
-      editing: false,
+      serverId: formData.serverId,
+      userId: formData.userId,
     };
 
     const saveTask = await axios.post(`${baseUrl}/add-task`, task);

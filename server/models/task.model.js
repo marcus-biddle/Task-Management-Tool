@@ -1,29 +1,13 @@
 import { model, Schema } from 'mongoose';
 
 const taskSchema = new Schema({
-  title: {
-    type: String,
-    required: true,
-  },
   description: {
     type: String,
     required: true,
   },
-  completed: {
-    type: Boolean,
-    required: true,
-  },
-  date: {
-    type: String,
-    required: true,
-  },
-  editing: {
-    type: Boolean,
-    required: true,
-  },
   userId: {
-    type: Number,
-    ref: 'User',
+    type: String,
+    // ref: 'User',
     required: true,
   },
   serverId: {
