@@ -156,7 +156,7 @@ export const Server: React.FC = () => {
       } else {
         // Adding new task
         console.log('clicked add')
-        addTask({description: task, serverId: _id, userId: ''});
+        addTask({description: task, serverId: _id, userId: "0107"});
         console.log(tasks);
         // setTaskList([...taskList, task]);
       }

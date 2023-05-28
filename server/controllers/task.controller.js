@@ -1,8 +1,6 @@
 import Task from "../models/task.model.js";
 import mongoose from 'mongoose';
 
-const { ObjectId } = mongoose.Types;
-
 const getTasks = async (req, res) => {
     try {
         const { body } = req;
