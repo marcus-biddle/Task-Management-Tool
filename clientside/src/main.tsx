@@ -7,7 +7,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import "./index.css";
-import { Server } from './pages/Server';
+import { ServerPage } from './pages/Server';
 import { Sidebar } from './components/Sidebar';
 import { ErrorPage } from './components/Error';
 import { ServerProvider } from './hooks/contexts/ServerContext';
@@ -25,7 +25,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'servers/:id',
-        element: <Server />,
+        element: <ServerPage />,
       },
     ]
   },

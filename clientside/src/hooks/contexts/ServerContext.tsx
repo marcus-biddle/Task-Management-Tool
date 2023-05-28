@@ -1,8 +1,8 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import { getServers, addServer, updateServer, deleteServer, getServer } from '../../api/serverApi';
 
-interface Server {
-  _id: number;
+export interface Server {
+  _id: string;
   title: string;
   tasks: number;
   description: string;

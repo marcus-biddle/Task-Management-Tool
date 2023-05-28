@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useServerContext } from '../../hooks/contexts/ServerContext';
+import { Server, useServerContext } from '../../hooks/contexts/ServerContext';
 import { useParams } from 'react-router';
 import { useTaskContext } from '../../hooks/contexts/TaskContext';
+import { Task } from '../../api/taskApi';
 
 const Container = styled.div`
   display: flex;
@@ -112,32 +113,26 @@ const EditButton = styled.button`
   }
 `;
 
-export const Server: React.FC = () => {
+export const ServerPage: React.FC = () => {
   const { getServer } = useServerContext();
   const { tasks, fetchTasks, updateTask, addTask } = useTaskContext();
   const { id } = useParams();
   const _id: string = id ? id : '';
-  console.log(_id, id);
-  const [task, setTask] = useState('');
-  const [taskList, setTaskList] = useState<string[]>([]);
+  const [task, setTask] = useState<string>("");
   const [editIndex, setEditIndex] = useState<number | null>(null);
-  const [server, setServer] = useState<any>(null);
+  const [server, setServer] = useState<Server | undefined>(undefined);
 
   useEffect(() => {
     const fetchServer = async () => {
       try {
-        const response = await getServer(_id);
-        console.log(response);
+        const response: Server | undefined = await getServer(_id);
         setServer(response);
       } catch (error) {
         console.error('Error fetching server:', error);
       }
     };
 
-    
     fetchServer();
-    fetchTasks(_id)
-    console.log(tasks);
   }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -149,38 +144,41 @@ export const Server: React.FC = () => {
       if (editIndex !== null) {
         // Editing existing task
         // updateTask();
-        // const updatedTaskList = [...taskList];
-        // updatedTaskList[editIndex] = task;
-        // setTaskList(updatedTaskList);
         setEditIndex(null);
       } else {
         // Adding new task
-        console.log('clicked add')
-        addTask({description: task, serverId: _id, userId: "0107"});
-        console.log(tasks);
-        // setTaskList([...taskList, task]);
+        addTask({ description: task, serverId: _id, userId: "0107" });
       }
       setTask('');
     }
   };
 
-  const handleDeleteTask = (index: number) => {
-    const updatedTaskList = [...taskList];
-    updatedTaskList.splice(index, 1);
-    setTaskList(updatedTaskList);
-    if (editIndex === index) {
-      setEditIndex(null);
-    }
+  const handleDeleteTask = async (index: number) => {
+    // const taskId = tasks[index]._id;
+    // try {
+    //   await deleteTask(taskId);
+    //   // After deleting the task, you may want to update the local tasks state.
+    //   setTasks((prevTasks) => prevTasks.filter((t) => t._id !== taskId));
+    // } catch (error) {
+    //   console.error('Error deleting task:', error);
+    // }
   };
 
   const handleEditTask = (index: number) => {
-    setTask(taskList[index]);
+    setTask(tasks[index].description);
     setEditIndex(index);
   };
 
-  if (!server) {
+  if (!server || !tasks) {
     return <div>Loading...</div>;
   }
+
+  
+  
+  const taskArray = Object.values(tasks); // Convert tasks object to an array
+  console.log(taskArray);
+
+  // So something is wrong with how I grab tasks
 
   return (
     <Container>
@@ -195,31 +193,27 @@ export const Server: React.FC = () => {
         <AddButton onClick={handleAddTask}>{editIndex !== null ? 'Save' : 'Add'}</AddButton>
       </InputContainer>
       <TaskList>
-        {tasks.length > 0 ? tasks.map((task, index) => {
-          return (
-            <TaskItem key={index}>
-              <TaskContent>
-                <TaskText>{task.description}</TaskText>
-                <EditButton onClick={() => handleEditTask(index)}>Edit</EditButton>
-                <DeleteButton onClick={() => handleDeleteTask(index)}>Delete</DeleteButton>
-              </TaskContent>
-              <TaskInfo>
-                <span>
-                  Author: John Doe
-                </span>
-                <span>
-                  {' '}at 10:00 AM
-                </span>
-              </TaskInfo>
-          </TaskItem>
-          )
-        })
-      :
-      ''}
+        {taskArray ? (
+          taskArray.map((task, index) => {
+            return (
+              <TaskItem key={index}>
+                <TaskContent>
+                  <TaskText></TaskText>
+                  <EditButton onClick={() => handleEditTask(index)}>Edit</EditButton>
+                  <DeleteButton onClick={() => handleDeleteTask(index)}>Delete</DeleteButton>
+                </TaskContent>
+                <TaskInfo>
+                  <span>Author: John Doe</span>
+                  <span>at 10:00 AM</span>
+                </TaskInfo>
+              </TaskItem>
+            )
+            
+          })
+        ) : (
+          <p>No tasks</p>
+        )} 
       </TaskList>
     </Container>
   );
 };
-
-
-

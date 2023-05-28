@@ -6,7 +6,7 @@ interface TaskContextType {
   addTask: (formData: Task) => Promise<void>;
   updateTask: (task: Task) => Promise<void>;
   deleteTask: (_id: string) => Promise<void>;
-  fetchTasks: (serverId: string) => Promise<void>;
+  fetchTasks: (serverId: string) => Promise<Task[]>;
 }
 
 const TaskContext = createContext<TaskContextType | undefined>(undefined);
@@ -14,24 +14,34 @@ const TaskContext = createContext<TaskContextType | undefined>(undefined);
 export const TaskProvider: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
   const [tasks, setTasks] = useState<Task[]>([]);
 
-  useEffect(() => {
-    fetchTasks('');
-  }, []);
-
-  const fetchTasks = async (serverId: string) => {
+  const fetchTasks = async (serverId: string): Promise<Task[]> => {
     try {
       const response = await getTasks(serverId);
-      setTasks(response.data);
+      const tasks: Task[] = response.data;
+      setTasks(tasks);
+      return tasks;
     } catch (error) {
       console.error('Error fetching tasks:', error);
+      return [];
     }
   };
+  
+
+  useEffect(() => {
+    fetchTasks('6472782d178c83559454bfb7');
+  }, []);
 
   const handleAddTask = async (formData: Task) => {
     try {
       const response = await addTask(formData);
       const addedTask = response.data;
-      setTasks(prevTasks => [...prevTasks, addedTask]);
+      setTasks(prevTasks => {
+        if (Array.isArray(prevTasks)) {
+          return [...prevTasks, addedTask];
+        } else {
+          return [addedTask];
+        }
+      });
     } catch (error) {
       console.error('Error adding task:', error);
     }
