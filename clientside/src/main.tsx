@@ -1,17 +1,15 @@
-import React from 'react';
 import './index.css';
 import App from './App';
-import { TodoProvider } from './hooks/contexts/provider';
-import { Sidebar } from '../../clientside/src/components/Sidebar';
-import TaskOptions from './components/TaskOptions';
+// import { TodoProvider } from './hooks/contexts/provider';
 import * as ReactDOM from "react-dom/client";
 import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
 import "./index.css";
-import ErrorPage from '../../clientside/src/components/Error';
 import { Server } from './pages/Server';
+import { Sidebar } from './components/Sidebar';
+import { ErrorPage } from './components/Error';
 
 const router = createBrowserRouter([
   {
@@ -24,7 +22,7 @@ const router = createBrowserRouter([
         element: <App />,
       },
       {
-        path: '/servers/:serverId',
+        path: 'server/:serverId',
         element: <Server />,
       },
     ]
@@ -35,7 +33,7 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-    <TodoProvider>
+    // <TodoProvider>
       <RouterProvider router={router} />
-    </TodoProvider>
+    // </TodoProvider>
 );

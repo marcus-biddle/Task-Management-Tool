@@ -1,6 +1,6 @@
 import { model, Schema } from 'mongoose';
 
-const todoSchema = new Schema(
+const taskSchema = new Schema(
     {
         title: {
             type: String,
@@ -21,9 +21,17 @@ const todoSchema = new Schema(
         editing: {
             type: Boolean,
             required: true
+        },
+        userId: {
+            type: Number,
+            required: true
+        },
+        serverId: {
+            type: Number,
+            required: true,
         }
     },
     { timestamps: true }
 )
 
-export default model("Todo", todoSchema);
+export default model("Task", taskSchema);

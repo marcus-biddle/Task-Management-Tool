@@ -22,5 +22,5 @@
   },
   "include": [
     "src"
-  ]
+, "../clientside/src/components/Sidebar", "../clientside/src/components/Error"  ]
 }
