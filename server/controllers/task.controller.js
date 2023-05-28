@@ -1,5 +1,7 @@
-import mongoose from "mongoose";
 import Task from "../models/task.model.js";
+import { Types } from 'mongoose';
+
+const { ObjectId } = Types;
 
 const getTasks = async (req, res) => {
     try {
@@ -16,10 +18,10 @@ const addTask = async (req, res) => {
         const { _id, description, userId, serverId } = req.body;
 
         const task = new Task({
-            _id: mongoose.Types.ObjectId(_id),
+            _id: ObjectId(_id),
             description: description,
             userId: userId,
-            serverId: mongoose.Types.ObjectId(serverId),
+            serverId: ObjectId(serverId),
         })
 
         const newTask = await task.save();
