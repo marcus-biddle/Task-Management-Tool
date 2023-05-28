@@ -12,16 +12,13 @@ const getTasks = async (req, res) => {
 
 const addTask = async (req, res) => {
     try {
-        const { title, description, completed, date, editing, userId, serverId } = req.body;
+        const { _id, description, userId, serverId } = req.body;
 
         const task = new Task({
-            title: title,
+            _id: _id,
             description: description,
-            completed: completed,
-            date: date,
-            editing: editing,
-            userId,
-            serverId,
+            userId: userId,
+            serverId: serverId,
         })
 
         const newTask = await task.save();

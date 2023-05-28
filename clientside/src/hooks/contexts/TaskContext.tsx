@@ -29,7 +29,9 @@ export const TaskProvider: React.FC<React.PropsWithChildren<{}>> = ({ children }
 
   const handleAddTask = async (formData: Task) => {
     try {
+      console.log('formData', formData);
       const response = await addTask(formData);
+      console.log(response);
       const addedTask = response.data;
       setTasks((prevTasks) => [...prevTasks, addedTask]);
     } catch (error) {

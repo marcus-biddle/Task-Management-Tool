@@ -155,6 +155,7 @@ export const Server: React.FC = () => {
         setEditIndex(null);
       } else {
         // Adding new task
+        console.log('clicked add')
         addTask({description: task, serverId: _id, userId: ''});
         console.log(tasks);
         // setTaskList([...taskList, task]);
