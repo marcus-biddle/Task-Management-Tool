@@ -1,28 +1,14 @@
-import { model, Schema } from 'mongoose';
+import mongoose from 'mongoose';
 
-const serverSchema = new Schema(
-    {
-        title: {
-            type: String,
-            required: true,
-        },
-        tasks: {
-            type: Number,
-            required: true,
-        },
-        description: {
-            type: String,
-        },
-        createdBy: {
-            type: Number,
-            required: true,
-        },
-        active: {
-            type: Boolean,
-            required: true,
-        }
-    },
-    { timestamps: true }
-)
+const serverSchema = new mongoose.Schema({
+  _id: { type: mongoose.Schema.Types.ObjectId, auto: true },
+  title: { type: String, required: true },
+  tasks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Task' }],
+  description: { type: String },
+  createdBy: { type: String, required: true },
+  active: { type: Boolean, default: true },
+});
 
-export default model("Server", serverSchema);
+const Server = mongoose.model('Server', serverSchema);
+
+export default Server;

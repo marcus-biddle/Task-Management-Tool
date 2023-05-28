@@ -1,7 +1,8 @@
-import { Outlet } from 'react-router';
+import { Outlet, useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useServerContext } from '../../hooks/contexts/ServerContext';
 
 const SidebarContainer = styled.div<{ isOpen: boolean }>`
   position: fixed;
@@ -34,7 +35,10 @@ const SidebarContent = styled.div`
 `;
 
 export const Sidebar = () => {
-    const [isOpen, setIsOpen] = useState(false);
+  const { servers } = useServerContext();
+  const { id } = useParams();
+  const _id: string = id ? id : '';
+  const [isOpen, setIsOpen] = useState(false);
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -53,12 +57,13 @@ export const Sidebar = () => {
                     <p>This is the sidebar component that slides open from the left side of the screen.</p>
                     <nav>
                         <ul>
-                            <li>
-                                <Link to={'server/1'}>Server 1</Link>
-                            </li>
-                            <li>
-                                <Link to={'server/2'}>Server 2</Link>
-                            </li>
+                          {servers.map((server, index) => {
+                            return (
+                              <li key={index}>
+                                <Link to={`servers/${server._id}`}>Server: {server._id}</Link>
+                              </li>
+                            )
+                          })}
                         </ul>
                     </nav>
                     </SidebarContent>

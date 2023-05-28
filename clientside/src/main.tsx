@@ -10,6 +10,7 @@ import "./index.css";
 import { Server } from './pages/Server';
 import { Sidebar } from './components/Sidebar';
 import { ErrorPage } from './components/Error';
+import { ServerProvider } from './hooks/contexts/ServerContext';
 
 const router = createBrowserRouter([
   {
@@ -22,7 +23,7 @@ const router = createBrowserRouter([
         element: <App />,
       },
       {
-        path: 'server/:serverId',
+        path: 'servers/:id',
         element: <Server />,
       },
     ]
@@ -33,7 +34,7 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-    // <TodoProvider>
+    <ServerProvider>
       <RouterProvider router={router} />
-    // </TodoProvider>
+    </ServerProvider> 
 );

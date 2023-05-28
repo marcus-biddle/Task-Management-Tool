@@ -1,11 +1,12 @@
 import { Router } from 'express';
-import { getServers, addServer, updateServer, deleteServer } from '../controllers/server.controller.js';
+import { getServers, addServer, updateServer, deleteServer, getServer } from '../controllers/server.controller.js';
 import { getTasks, addTask, updateTask, deleteTask } from '../controllers/task.controller.js';
 
 const router = Router();
 
 // Server Routes
 router.get("/servers", getServers);
+router.get("/servers/:id", getServer)
 router.post('/add-server', addServer);
 router.put('/edit-server/:id', updateServer);
 router.delete('/delete-server/:id', deleteServer);

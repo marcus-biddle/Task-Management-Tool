@@ -1,72 +1,87 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
-// import { Task } from '../models/task.model';
+import { getTasks, addTask, updateTask, deleteTask } from '../../api/taskApi';
 
 interface Task {
+    _id: string;
     title: string;
     description: string;
-    completed: string;
+    completed: boolean;
     date: string;
     editing: boolean;
-    userId: number;
-    serverId: number;
 }
 
-// Define the context type
 interface TaskContextType {
   tasks: Task[];
-  addTask: (task: Task) => void;
-  updateTask: (id: string, task: Task) => void;
-  deleteTask: (id: string) => void;
+  addTask: (formData: Task) => Promise<void>;
+  updateTask: (task: Task) => Promise<void>;
+  deleteTask: (_id: string) => Promise<void>;
 }
 
-// Create the context
 const TaskContext = createContext<TaskContextType | undefined>(undefined);
 
-// Create the provider component
-export const TaskProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
+export const TaskProvider: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
   const [tasks, setTasks] = useState<Task[]>([]);
 
-  // Fetch the tasks from the API
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        // Perform API request to get the tasks
-        // Update the state with the fetched tasks
+        const response = await getTasks();
+        setTasks(response.data);
       } catch (error) {
-        // Handle the error
+        console.error('Error fetching tasks:', error);
       }
     };
 
     fetchTasks();
   }, []);
 
-  // Function to add a new task
-  const addTask = (task: Task) => {
-    // Perform API request to add the task
-    // Update the state with the new task
+  const handleAddTask = async (formData: Task) => {
+    try {
+      const response = await addTask(formData);
+      const addedTask = response.data;
+      setTasks((prevTasks) => [...prevTasks, addedTask]);
+    } catch (error) {
+      console.error('Error adding task:', error);
+    }
   };
 
-  // Function to update an existing task
-  const updateTask = (id: string, task: Task) => {
-    // Perform API request to update the task
-    // Update the state with the updated task
+  const handleUpdateTask = async (task: Task) => {
+    try {
+      const response = await updateTask(task);
+      const updatedTask = response.data;
+      setTasks((prevTasks) => {
+        const updatedTasks = prevTasks.map((t) => (t._id === updatedTask._id ? updatedTask : t));
+        return updatedTasks;
+      });
+    } catch (error) {
+      console.error('Error updating task:', error);
+    }
   };
 
-  // Function to delete a task
-  const deleteTask = (id: string) => {
-    // Perform API request to delete the task
-    // Update the state by removing the deleted task
+  const handleDeleteTask = async (_id: string) => {
+    try {
+      await deleteTask(_id);
+      setTasks((prevTasks) => prevTasks.filter((t) => t._id !== _id));
+    } catch (error) {
+      console.error('Error deleting task:', error);
+    }
+  };
+
+  const taskContextValue: TaskContextType = {
+    tasks,
+    addTask: handleAddTask,
+    updateTask: handleUpdateTask,
+    deleteTask: handleDeleteTask,
   };
 
   return (
-    <TaskContext.Provider value={{ tasks, addTask, updateTask, deleteTask }}>
+    <TaskContext.Provider value={taskContextValue}>
       {children}
     </TaskContext.Provider>
   );
 };
 
-// Custom hook to consume the TaskContext
-export const useTaskContext = () => {
+export const useTaskContext = (): TaskContextType => {
   const context = useContext(TaskContext);
 
   if (!context) {

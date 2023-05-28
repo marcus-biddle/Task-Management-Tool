@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useServerContext } from '../../hooks/contexts/ServerContext';
+import { useParams } from 'react-router';
 
 const Container = styled.div`
   display: flex;
@@ -110,9 +112,28 @@ const EditButton = styled.button`
 `;
 
 export const Server: React.FC = () => {
+  const { getServer } = useServerContext();
+  const { id } = useParams();
+  const _id: string = id ? id : '';
+  console.log(_id, id);
   const [task, setTask] = useState('');
   const [taskList, setTaskList] = useState<string[]>([]);
   const [editIndex, setEditIndex] = useState<number | null>(null);
+  const [server, setServer] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchServer = async () => {
+      try {
+        const response = await getServer(_id);
+        console.log(response);
+        setServer(response);
+      } catch (error) {
+        console.error('Error fetching server:', error);
+      }
+    };
+
+    fetchServer();
+  }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTask(e.target.value);
@@ -148,9 +169,13 @@ export const Server: React.FC = () => {
     setEditIndex(index);
   };
 
+  if (!server) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <Container>
-      <Title>Task List</Title>
+      <Title>{server}</Title>
       <InputContainer>
         <TaskInput
           type="text"

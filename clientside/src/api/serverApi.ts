@@ -58,3 +58,13 @@ export const deleteServer = async (
     throw err;
   }
 };
+
+export const getServer = async (id: string): Promise<AxiosResponse<any>> => {
+    try {
+      console.log(id);
+      const server: AxiosResponse<any> = await axios.get(`${baseUrl}/servers/${id}`);
+      return server;
+    } catch (err) {
+      throw err;
+    }
+  };

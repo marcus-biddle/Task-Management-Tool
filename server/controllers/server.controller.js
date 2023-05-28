@@ -1,5 +1,16 @@
 import Server from "../models/server.model.js";
 
+const getServer = async (req, res) => {
+    try {
+      const serverId = req.params.id;
+  
+      const server = await Server.findOne({ _id: serverId });
+      res.status(200).json({ server });
+    } catch (err) {
+      throw err;
+    }
+  }
+
 const getServers = async (req, res) => {
     try {
         const servers = await Server.find();
@@ -75,4 +86,4 @@ const deleteServer = async (req, res) => {
     }
 };
 
-export { getServers, addServer, updateServer, deleteServer };
+export { getServer, getServers, addServer, updateServer, deleteServer };

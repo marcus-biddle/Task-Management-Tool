@@ -1,70 +1,109 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
-// import { Server } from '../models/server.model';
+import { getServers, addServer, updateServer, deleteServer, getServer } from '../../api/serverApi';
 
 interface Server {
-    title: string;
-    tasks: number;
-    description: string;
-    createdBy: number;
-    active: boolean;
+  _id: number;
+  title: string;
+  tasks: number;
+  description: string;
+  createdBy: number;
+  active: boolean;
 }
 
-// Define the context type
 interface ServerContextType {
   servers: Server[];
-  addServer: (server: Server) => void;
-  updateServer: (id: string, server: Server) => void;
-  deleteServer: (id: string) => void;
+  addServer: (formData: any) => Promise<void>;
+  updateServer: (server: Server) => Promise<void>;
+  deleteServer: (id: string) => Promise<void>;
+  getServer: (id: string) => Promise<Server | undefined>;
 }
 
-// Create the context
 const ServerContext = createContext<ServerContextType | undefined>(undefined);
 
-// Create the provider component
-export const ServerProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
+export const ServerProvider: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
   const [servers, setServers] = useState<Server[]>([]);
 
-  // Fetch the servers from the API
   useEffect(() => {
     const fetchServers = async () => {
       try {
-        // Perform API request to get the servers
-        // Update the state with the fetched servers
+        const response = await getServers();
+        const { data } = response;
+        setServers(data.servers);
       } catch (error) {
-        // Handle the error
+        console.error('Error fetching servers:', error);
       }
     };
 
     fetchServers();
   }, []);
 
-  // Function to add a new server
-  const addServer = (server: Server) => {
-    // Perform API request to add the server
-    // Update the state with the new server
+  const handleAddServer = async (formData: any) => {
+    try {
+      const response = await addServer(formData);
+      const { server, message } = response.data;
+      setServers((prevServers) => [...prevServers, server]);
+      console.log(message);
+    } catch (error) {
+      console.error('Error adding server:', error);
+      // Perform any additional error handling actions
+    }
   };
 
-  // Function to update an existing server
-  const updateServer = (id: string, server: Server) => {
-    // Perform API request to update the server
-    // Update the state with the updated server
+  const handleUpdateServer = async (updatedServer: Server) => {
+    try {
+      const response = await updateServer(updatedServer);
+      const { server, message } = response.data;
+      setServers((prevServers) => {
+        const updatedServers = prevServers.map((s) => (s._id === server._id ? server : s));
+        return updatedServers;
+      });
+      console.log(message);
+    } catch (error) {
+      console.error('Error updating server:', error);
+      // Perform any additional error handling actions
+    }
   };
 
-  // Function to delete a server
-  const deleteServer = (id: string) => {
-    // Perform API request to delete the server
-    // Update the state by removing the deleted server
+  const handleDeleteServer = async (id: string) => {
+    try {
+      const response = await deleteServer(id);
+      const { server, message } = response.data;
+      setServers((prevServers) => prevServers.filter((s) => s._id !== server._id));
+      console.log(message);
+    } catch (error) {
+      console.error('Error deleting server:', error);
+      // Perform any additional error handling actions
+    }
+  };
+
+  const handleGetServer = async (id: string): Promise<Server | undefined> => {
+    try {
+      const response = await getServer(id);
+      const { data } = response;
+      return data.server;
+    } catch (error) {
+      console.error('Error fetching server:', error);
+      // Perform any additional error handling actions
+      return undefined;
+    }
+  };
+
+  const serverContextValue: ServerContextType = {
+    servers,
+    addServer: handleAddServer,
+    updateServer: handleUpdateServer,
+    deleteServer: handleDeleteServer,
+    getServer: handleGetServer,
   };
 
   return (
-    <ServerContext.Provider value={{ servers, addServer, updateServer, deleteServer }}>
+    <ServerContext.Provider value={serverContextValue}>
       {children}
     </ServerContext.Provider>
   );
 };
 
-// Custom hook to consume the ServerContext
-export const useServerContext = () => {
+export const useServerContext = (): ServerContextType => {
   const context = useContext(ServerContext);
 
   if (!context) {
