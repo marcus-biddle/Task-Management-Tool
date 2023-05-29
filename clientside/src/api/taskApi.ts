@@ -15,13 +15,16 @@ export interface Task {
 
 export const getTasks = async (serverId: string): Promise<AxiosResponse<any>> => {
   try {
-    const tasks = await axios.get(`${baseUrl}/tasks?serverId=${serverId}`);
-    console.log('getTasks api', tasks.data)
+    const tasks = await axios.get(`${baseUrl}/tasks`, {
+      params: { serverId },
+    });
+    console.log('getTasks api', serverId, tasks.data);
     return tasks;
   } catch (error) {
     throw new Error("Failed to fetch tasks");
   }
 };
+
 
 export const addTask = async (formData: Task): Promise<AxiosResponse<any>> => {
   try {

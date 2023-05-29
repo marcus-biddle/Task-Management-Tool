@@ -24,11 +24,6 @@ export const TaskProvider: React.FC<React.PropsWithChildren<{}>> = ({ children }
       return [];
     }
   };
-  
-
-  useEffect(() => {
-    fetchTasks('6472782d178c83559454bfb7');
-  }, []);
 
   const handleAddTask = async (formData: Task) => {
     try {

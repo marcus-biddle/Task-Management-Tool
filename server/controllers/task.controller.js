@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 const getTasks = async (req, res) => {
     try {
       const { serverId } = req.query;
-      const tasks = await Task.find({ server: serverId });
+      const tasks = await Task.find({ serverId: serverId });
       res.status(200).json({ tasks });
     } catch (err) {
       console.error('Error fetching tasks:', err);
