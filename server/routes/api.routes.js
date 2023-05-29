@@ -21,7 +21,7 @@ router.delete('/delete-task/:id', deleteTask);
 // User Routes
 router.get('/users', getUsers);
 router.get('/users/:id', getUserById);
-router.post('users-create', createUser);
+router.post('/users-create', createUser);
 router.put('/users/:id', updateUser);
 router.delete('/users/:id', deleteUser);
 
