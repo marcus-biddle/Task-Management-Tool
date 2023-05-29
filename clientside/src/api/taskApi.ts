@@ -6,11 +6,14 @@ const baseUrl: string = 'https://mongodb-server-6t4m.onrender.com/api';
 export interface Task {
   _id?: string;
   description: string;
-  serverId: string;
   userId: string;
+  serverId: string;
+  createdAt?: string;
+  updatedAt?: string;
+  __v?: number;
 }
 
-export const getTasks = async (serverId: string): Promise<AxiosResponse<Task[]>> => {
+export const getTasks = async (serverId: string): Promise<AxiosResponse<any>> => {
   try {
     const tasks: AxiosResponse<Task[]> = await axios.get(`${baseUrl}/tasks?serverId=${serverId}`);
     return tasks;
@@ -19,7 +22,7 @@ export const getTasks = async (serverId: string): Promise<AxiosResponse<Task[]>>
   }
 };
 
-export const addTask = async (formData: Task): Promise<AxiosResponse<Task>> => {
+export const addTask = async (formData: Task): Promise<AxiosResponse<any>> => {
   try {
     const task = {
       _id: uuidv4(),
@@ -29,22 +32,23 @@ export const addTask = async (formData: Task): Promise<AxiosResponse<Task>> => {
     };
 
     const saveTask = await axios.post(`${baseUrl}/add-task`, task);
-    return saveTask.data;
+    return saveTask;
   } catch (error) {
     throw new Error("Failed to add task");
   }
 };
 
-export const updateTask = async (task: Task): Promise<AxiosResponse<Task>> => {
+
+export const updateTask = async (task: Task): Promise<AxiosResponse<any>> => {
   try {
     const updatedTask = await axios.put(`${baseUrl}/edit-task/${task._id}`, task);
-    return updatedTask.data;
+    return updatedTask;
   } catch (error) {
     throw new Error("Failed to update task");
   }
 };
 
-export const deleteTask = async (_id: string): Promise<AxiosResponse<void>> => {
+export const deleteTask = async (_id: string): Promise<AxiosResponse<any>> => {
   try {
     const deleteTask = await axios.delete(`${baseUrl}/delete-task/${_id}`);
     return deleteTask;

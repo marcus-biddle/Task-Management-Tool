@@ -7,14 +7,75 @@ import { Task } from '../../api/taskApi';
 
 const Container = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
+  position: relative;
 `;
 
-const Title = styled.h1`
-  font-size: 28px;
+const MainContent = styled.div`
+  flex: 1;
+  padding: 20px;
+  padding-right: 18rem;
+  overflow: auto;
+`;
+
+const Sidebar = styled.div<{ isOpen: boolean }>`
+  position: absolute;
+  height: 100vh;
+  right: ${({ isOpen }) => (isOpen ? '-13rem' : '-215px')};
+  width: 300px;
+  background-color: #f5f5f5;
+  padding: 20px;
+  transition: right 0.3s ease-in-out;
+  top: -17rem;
+  bottom: 0;
+  opacity: ${({ isOpen }) => (isOpen ? '1' : '0')};
+  visibility: ${({ isOpen }) => (isOpen ? 'visible' : 'hidden')};
+
+  @media (max-width: 768px) {
+    width: 100%;
+    max-width: 300px;
+    height: 100vh;
+  }
+`;
+
+const TitleContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin-bottom: 20px;
+`;
+
+const ServerTitle = styled.h1`
+  font-size: 28px;
+  text-align: center;
+  flex: 1;
+`;
+
+const SidebarTitle = styled.h2`
+  font-size: 20px;
+  margin-bottom: 10px;
+`;
+
+const SidebarButton = styled.button`
+  padding: 10px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #0070f3;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+
+  &:hover {
+    background-color: #0058cc;
+  }
+`;
+
+const SidebarAccordion = styled.div`
+  margin-bottom: 10px;
+`;
+
+const AccordionContent = styled.div`
+  margin-top: 10px;
 `;
 
 const InputContainer = styled.div`
@@ -26,6 +87,7 @@ const InputContainer = styled.div`
 const TaskInput = styled.input`
   flex: 1;
   padding: 10px;
+  padding-right: 14rem;
   font-size: 16px;
   border: none;
   border-radius: 4px;
@@ -107,26 +169,70 @@ const EditButton = styled.button`
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.2s ease-in-out;
+  margin-left: 10px;
 
   &:hover {
     background-color: #37833d;
   }
 `;
 
+const ActionButton = styled.button`
+  padding: 10px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #0070f3;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+
+  &:hover {
+    background-color: #0058cc;
+  }
+`;
+
+const EditServerTitleInput = styled.input`
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+`;
+
+const ServerSettingsButton = styled.button<{ isOpen: boolean }>`
+  padding: 10px;
+  font-size: 50px;
+  color: ${({ isOpen }) => (isOpen ? '#f44336' : '#4caf50')};
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s ease-in-out;
+
+  &:hover {
+    color: ${({ isOpen }) => (isOpen ? '#e53935' : '#43a047')};
+  }
+`;
+
 export const ServerPage: React.FC = () => {
-  const { getServer } = useServerContext();
-  const { tasks, fetchTasks, updateTask, addTask } = useTaskContext();
+  const { getServer, updateServer } = useServerContext();
+  const { tasks, fetchTasks, updateTask, addTask, deleteTask } = useTaskContext();
   const { id } = useParams();
   const _id: string = id ? id : '';
   const [task, setTask] = useState<string>("");
-  const [editIndex, setEditIndex] = useState<number | null>(null);
-  const [server, setServer] = useState<Server | undefined>(undefined);
+  const [editIndex, setEditIndex] = useState<Task | null>(null);
+  const [server, setServer] = useState<Server>();
+  const [serverTasks, setServerTasks] = useState<Task[]>([]);
+  const [isOpen, setIsOpen] = useState(false);
+  const [isEditingTitle, setIsEditingTitle] = useState(false);
+  const [newServerTitle, setNewServerTitle] = useState('');
 
   useEffect(() => {
     const fetchServer = async () => {
       try {
-        const response: Server | undefined = await getServer(_id);
+        const response: Server = await getServer(_id);
+        const taskResponse: any = await fetchTasks(_id);
         setServer(response);
+        setServerTasks(taskResponse);
       } catch (error) {
         console.error('Error fetching server:', error);
       }
@@ -139,81 +245,160 @@ export const ServerPage: React.FC = () => {
     setTask(e.target.value);
   };
 
-  const handleAddTask = () => {
+  const handleAddTask = async () => {
     if (task.trim() !== '') {
       if (editIndex !== null) {
         // Editing existing task
-        // updateTask();
+        const updatedTask: Task = { ...editIndex, description: task };
+        const response = await updateTask(updatedTask);
+        setServerTasks(response);
         setEditIndex(null);
       } else {
         // Adding new task
-        addTask({ description: task, serverId: _id, userId: "0107" });
+        const newTask: Task = { description: task, serverId: _id, userId: "0107" };
+        try {
+          const response = await addTask(newTask);
+          setServerTasks(response);
+        } catch (error) {
+          console.error('Error adding task:', error);
+        }
       }
       setTask('');
     }
   };
 
-  const handleDeleteTask = async (index: number) => {
-    // const taskId = tasks[index]._id;
-    // try {
-    //   await deleteTask(taskId);
-    //   // After deleting the task, you may want to update the local tasks state.
-    //   setTasks((prevTasks) => prevTasks.filter((t) => t._id !== taskId));
-    // } catch (error) {
-    //   console.error('Error deleting task:', error);
-    // }
+  const handleDeleteTask = async (task: Task) => {
+    const id = task._id ? task._id : ''
+    try {
+      await deleteTask(id);
+      setServerTasks(prevTasks => prevTasks.filter((t: Task) => t._id !== id));
+    } catch (error) {
+      console.error('Error deleting task:', error);
+    }
   };
 
-  const handleEditTask = (index: number) => {
-    setTask(tasks[index].description);
-    setEditIndex(index);
+  const handleEditTask = (task: Task) => {
+    setTask(task.description);
+    setEditIndex(task);
+  };
+
+  const handleServerDelete = async () => {
+    try {
+      // Delete server logic here
+    } catch (error) {
+      console.error('Error deleting server:', error);
+    }
+  };
+
+  const handleColorChange = () => {
+    // Handle color change logic here
+  };
+
+  const handleViewUsers = () => {
+    // Handle view users logic here
+  };
+
+  const handleSidebarToggle = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const handleEditServerTitle = () => {
+    setIsEditingTitle(true);
+    setNewServerTitle(''); // Set the initial value of the input to the current server title
+  };
+
+  const handleSaveServerTitle = async () => {
+    setIsEditingTitle(false);
+    // Update server title
+    const newServer: Server = { ...server, title: newServerTitle };
+    setServer(newServer);
+  
+    // Perform the server update request
+    try {
+      const response = await updateServer(newServer);
+    } catch (error) {
+      console.error('Error updating server title:', error);
+    }
+  };
+  
+
+  const handleCancelEditServerTitle = () => {
+    setIsEditingTitle(false);
   };
 
   if (!server || !tasks) {
     return <div>Loading...</div>;
   }
 
-  
-  
-  const taskArray = Object.values(tasks); // Convert tasks object to an array
-  console.log(taskArray);
-
-  // So something is wrong with how I grab tasks
-
   return (
     <Container>
-      <Title>{server.title}</Title>
-      <InputContainer>
-        <TaskInput
-          type="text"
-          placeholder="Enter task"
-          value={task}
-          onChange={handleInputChange}
-        />
-        <AddButton onClick={handleAddTask}>{editIndex !== null ? 'Save' : 'Add'}</AddButton>
-      </InputContainer>
-      <TaskList>
-        {taskArray ? (
-          taskArray.map((task, index) => {
-            return (
-              <TaskItem key={index}>
-                <TaskContent>
-                  <TaskText></TaskText>
-                  <EditButton onClick={() => handleEditTask(index)}>Edit</EditButton>
-                  <DeleteButton onClick={() => handleDeleteTask(index)}>Delete</DeleteButton>
-                </TaskContent>
-                <TaskInfo>
-                  <span>Author: John Doe</span>
-                  <span>at 10:00 AM</span>
-                </TaskInfo>
-              </TaskItem>
-            )
-            
-          })
-        ) : (
-          <p>No tasks</p>
-        )} 
-      </TaskList>
+      <MainContent>
+        <TitleContainer>
+          <ServerTitle>{server.title}</ServerTitle>
+          <ServerSettingsButton isOpen={isOpen} onClick={handleSidebarToggle}>
+            {isOpen ? '-' : '+'}
+          </ServerSettingsButton>
+        </TitleContainer>
+        <InputContainer>
+          <TaskInput
+            type="text"
+            placeholder="Enter task"
+            value={task}
+            onChange={handleInputChange}
+          />
+          <AddButton onClick={handleAddTask}>{editIndex !== null ? 'Save' : 'Add'}</AddButton>
+        </InputContainer>
+        <TaskList>
+          {serverTasks ? (
+            serverTasks.map((task: Task, index) => {
+              return (
+                <TaskItem key={index}>
+                  <TaskContent>
+                    <TaskText>{task.description}</TaskText>
+                    <EditButton onClick={() => handleEditTask(task)}>Edit</EditButton>
+                    <DeleteButton onClick={() => handleDeleteTask(task)}>Delete</DeleteButton>
+                  </TaskContent>
+                  <TaskInfo>
+                    <span>Author: John Doe</span>
+                    <span>at 10:00 AM</span>
+                  </TaskInfo>
+                </TaskItem>
+              )
+              
+            })
+          ) : (
+            <p>No tasks</p>
+          )} 
+        </TaskList>
+      </MainContent>
+      <Sidebar isOpen={isOpen}>
+        <SidebarAccordion>
+          <h1>Server - {server.title}</h1>
+            <AccordionContent>
+              {isEditingTitle ? (
+                <div>
+                  <EditServerTitleInput
+                    type="text"
+                    value={newServerTitle}
+                    onChange={(e) => setNewServerTitle(e.target.value)}
+                  />
+                  <button onClick={handleSaveServerTitle}>Save</button>
+                  <button onClick={handleCancelEditServerTitle}>Cancel</button>
+                </div>
+              ) : (
+                <div>
+                  <SidebarTitle>Actions</SidebarTitle>
+                  <button onClick={handleEditServerTitle}>Edit Server Title</button>
+                </div>
+              )}
+              <ActionButton onClick={handleServerDelete}>Delete Server</ActionButton>
+              <SidebarTitle>Appearance</SidebarTitle>
+              <ActionButton onClick={handleColorChange}>Change Color</ActionButton>
+              <SidebarTitle>Users</SidebarTitle>
+              <ActionButton onClick={handleViewUsers}>View Users</ActionButton>
+            </AccordionContent>
+        </SidebarAccordion>
+      </Sidebar>
     </Container>
   );
 };

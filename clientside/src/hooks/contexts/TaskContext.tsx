@@ -3,8 +3,8 @@ import { getTasks, addTask, updateTask, deleteTask, Task } from '../../api/taskA
 
 interface TaskContextType {
   tasks: Task[];
-  addTask: (formData: Task) => Promise<void>;
-  updateTask: (task: Task) => Promise<void>;
+  addTask: (formData: Task) => Promise<Task[]>;
+  updateTask: (task: Task) => Promise<Task[]>;
   deleteTask: (_id: string) => Promise<void>;
   fetchTasks: (serverId: string) => Promise<Task[]>;
 }
@@ -16,10 +16,8 @@ export const TaskProvider: React.FC<React.PropsWithChildren<{}>> = ({ children }
 
   const fetchTasks = async (serverId: string): Promise<Task[]> => {
     try {
-      const response = await getTasks(serverId);
-      const tasks: Task[] = response.data;
-      setTasks(tasks);
-      return tasks;
+      const { status, data } = await getTasks(serverId);
+      return data.tasks;
     } catch (error) {
       console.error('Error fetching tasks:', error);
       return [];
@@ -33,15 +31,15 @@ export const TaskProvider: React.FC<React.PropsWithChildren<{}>> = ({ children }
 
   const handleAddTask = async (formData: Task) => {
     try {
-      const response = await addTask(formData);
-      const addedTask = response.data;
-      setTasks(prevTasks => {
-        if (Array.isArray(prevTasks)) {
-          return [...prevTasks, addedTask];
-        } else {
-          return [addedTask];
-        }
-      });
+      const { status, data } = await addTask(formData);
+  
+      if (status === 200) {
+        console.log('Added task:', data.task);
+        setTasks(data.tasks);
+        return data.tasks;
+      } else {
+        console.log('Failed to add task');
+      }
     } catch (error) {
       console.error('Error adding task:', error);
     }
@@ -50,25 +48,38 @@ export const TaskProvider: React.FC<React.PropsWithChildren<{}>> = ({ children }
 
   const handleUpdateTask = async (task: Task) => {
     try {
-      const response = await updateTask(task);
-      const updatedTask = response.data;
-      setTasks((prevTasks) => {
-        const updatedTasks = prevTasks.map((t) => (t._id === updatedTask._id ? updatedTask : t));
-        return updatedTasks;
-      });
+      const { status, data }  = await updateTask(task);
+
+      if (status === 200) {
+        console.log('Updated task:', data.task);
+        setTasks(data.tasks);
+        return data.tasks;
+      } else {
+        console.log('Failed to update task');
+      }
+      
     } catch (error) {
       console.error('Error updating task:', error);
+      throw error;
     }
   };
+  
 
-  const handleDeleteTask = async (_id: string) => {
+  const handleDeleteTask = async (taskId: string) => {
     try {
-      await deleteTask(_id);
-      setTasks((prevTasks) => prevTasks.filter((t) => t._id !== _id));
+      const { status, data } = await deleteTask(taskId);
+  
+      if (status === 200) {
+        console.log('Deleted task:', data.task);
+        setTasks(data.tasks);
+      } else {
+        console.log('Failed to delete task');
+      }
     } catch (error) {
       console.error('Error deleting task:', error);
     }
   };
+  
 
   const taskContextValue: TaskContextType = {
     tasks,

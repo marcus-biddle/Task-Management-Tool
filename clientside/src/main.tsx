@@ -1,6 +1,5 @@
 import './index.css';
 import App from './App';
-// import { TodoProvider } from './hooks/contexts/provider';
 import * as ReactDOM from "react-dom/client";
 import {
   createBrowserRouter,

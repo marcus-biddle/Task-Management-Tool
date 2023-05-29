@@ -2,6 +2,13 @@ import axios, { AxiosResponse } from 'axios';
 
 const baseUrl: string = 'https://mongodb-server-6t4m.onrender.com/api';
 
+export interface Server {
+  _id?: string;
+  title: string;
+  createdBy?: number;
+  active?: boolean; //Instead of deleting, can soft delete
+}
+
 export const getServers = async (): Promise<AxiosResponse<any>> => {
   try {
     const servers: AxiosResponse<any> = await axios.get(
@@ -13,14 +20,10 @@ export const getServers = async (): Promise<AxiosResponse<any>> => {
   }
 };
 
-export const addServer = async (
-  formData: any
-): Promise<AxiosResponse<any>> => {
+export const addServer = async (formData: any): Promise<AxiosResponse<any>> => {
   try {
     const server = {
       title: formData.title,
-      tasks: formData.tasks,
-      description: formData.description,
       createdBy: formData.createdBy,
       active: formData.active,
     };
@@ -33,9 +36,7 @@ export const addServer = async (
   }
 };
 
-export const updateServer = async (
-  server: any
-): Promise<AxiosResponse<any>> => {
+export const updateServer = async (server: any): Promise<AxiosResponse<any>> => {
   try {
     const updatedServer = await axios.put(
       baseUrl + '/edit-server/' + server._id,

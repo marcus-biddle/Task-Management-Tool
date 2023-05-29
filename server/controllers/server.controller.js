@@ -52,12 +52,12 @@ const updateServer = async (req, res) => {
         }
 
         const updateServer = await Server.findByIdAndUpdate( { _id: id }, body);
-        const allServersInServer = await Server.find();
+        const allServers = await Server.find();
 
         res.status(200).json({ 
             message: "Server updated",
             server: updateServer,
-            servers: allServersInServer,
+            servers: allServers,
         });
     } catch (err) {
         throw err;

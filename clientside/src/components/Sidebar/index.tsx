@@ -34,14 +34,56 @@ const SidebarContent = styled.div`
   padding: 20px;
 `;
 
+const AddServerForm = styled.form`
+  margin-top: 20px;
+  margin-right: 1.5rem;
+`;
+
+const AddServerInput = styled.input`
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+`;
+
+const SidebarList = styled.ul`
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  padding-top: 20px;
+`;
+
+const SidebarListItem = styled.li`
+  margin-bottom: 10px;
+
+  a {
+    text-decoration: none;
+    color: #333;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+`;
+
 export const Sidebar = () => {
-  const { servers } = useServerContext();
+  const { servers, addServer } = useServerContext();
   const { id } = useParams();
   const _id: string = id ? id : '';
   const [isOpen, setIsOpen] = useState(false);
+  const [newServerTitle, setNewServerTitle] = useState('');
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
+  };
+
+  const handleAddServer = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Add your logic to save the new server title
+    console.log('New Server Title:', newServerTitle);
+    addServer()
+    // Reset the input field after saving
+    setNewServerTitle('');
   };
 
   return (
@@ -54,17 +96,25 @@ export const Sidebar = () => {
                 <SidebarContainer isOpen={isOpen}>
                     <SidebarContent>
                     <h2>Task Management Servers</h2>
-                    <p>This is the sidebar component that slides open from the left side of the screen.</p>
+                    <p>Click on a server or create your own.</p>
+                    <AddServerForm onSubmit={handleAddServer}>
+                      <AddServerInput
+                        type="text"
+                        placeholder="Enter server title"
+                        value={newServerTitle}
+                        onChange={(e) => setNewServerTitle(e.target.value)}
+                      />
+                      <button type="submit">Create Server</button>
+                    </AddServerForm>
+                    
                     <nav>
-                        <ul>
-                          {servers.map((server, index) => {
-                            return (
-                              <li key={index}>
-                                <Link to={`servers/${server._id}`}>Server: {server.title}</Link>
-                              </li>
-                            )
-                          })}
-                        </ul>
+                      <SidebarList>
+                        {servers.map((server, index) => (
+                          <SidebarListItem key={index}>
+                            <Link to={`servers/${server._id}`}>Server: {server.title}</Link>
+                          </SidebarListItem>
+                        ))}
+                      </SidebarList>
                     </nav>
                     </SidebarContent>
                 </SidebarContainer>

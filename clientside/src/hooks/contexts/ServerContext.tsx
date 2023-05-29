@@ -1,21 +1,14 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
-import { getServers, addServer, updateServer, deleteServer, getServer } from '../../api/serverApi';
+import { getServers, addServer, updateServer, deleteServer, getServer, Server } from '../../api/serverApi';
 
-export interface Server {
-  _id: string;
-  title: string;
-  tasks: number;
-  description: string;
-  createdBy: number;
-  active: boolean;
-}
+
 
 interface ServerContextType {
   servers: Server[];
   addServer: (formData: any) => Promise<void>;
-  updateServer: (server: Server) => Promise<void>;
+  updateServer: (server: Server) => Promise<Server>;
   deleteServer: (id: string) => Promise<void>;
-  getServer: (id: string) => Promise<Server | undefined>;
+  getServer: (id: string) => Promise<Server>;
 }
 
 const ServerContext = createContext<ServerContextType | undefined>(undefined);
@@ -42,7 +35,7 @@ export const ServerProvider: React.FC<React.PropsWithChildren<{}>> = ({ children
       const response = await addServer(formData);
       const { server, message } = response.data;
       setServers((prevServers) => [...prevServers, server]);
-      console.log(message);
+      console.log('Added server:', server);
     } catch (error) {
       console.error('Error adding server:', error);
       // Perform any additional error handling actions
@@ -52,15 +45,12 @@ export const ServerProvider: React.FC<React.PropsWithChildren<{}>> = ({ children
   const handleUpdateServer = async (updatedServer: Server) => {
     try {
       const response = await updateServer(updatedServer);
-      const { server, message } = response.data;
-      setServers((prevServers) => {
-        const updatedServers = prevServers.map((s) => (s._id === server._id ? server : s));
-        return updatedServers;
-      });
-      console.log(message);
+      const { server, servers, message } = response.data;
+      console.log('Updated server', server);
+      setServers(servers);
+      return server;
     } catch (error) {
       console.error('Error updating server:', error);
-      // Perform any additional error handling actions
     }
   };
 
@@ -76,15 +66,13 @@ export const ServerProvider: React.FC<React.PropsWithChildren<{}>> = ({ children
     }
   };
 
-  const handleGetServer = async (id: string): Promise<Server | undefined> => {
+  const handleGetServer = async (id: string) => {
     try {
       const response = await getServer(id);
       const { data } = response;
       return data.server;
     } catch (error) {
       console.error('Error fetching server:', error);
-      // Perform any additional error handling actions
-      return undefined;
     }
   };
 
