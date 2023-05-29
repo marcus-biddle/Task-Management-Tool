@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { getServers, addServer, updateServer, deleteServer, getServer } from '../controllers/server.controller.js';
 import { getTasks, addTask, updateTask, deleteTask } from '../controllers/task.controller.js';
-import { createUser, deleteUser, getUserById, updateUser } from '../controllers/user.controller.js';
+import { createUser, deleteUser, getUserById, getUsers, updateUser } from '../controllers/user.controller.js';
 
 const router = Router();
 
@@ -19,7 +19,7 @@ router.put('/edit-task/:id', updateTask);
 router.delete('/delete-task/:id', deleteTask);
 
 // User Routes
-router.post('/users', createUser);
+router.post('/users', getUsers);
 router.get('/users/:id', getUserById);
 router.put('/users/:id', updateUser);
 router.delete('/users/:id', deleteUser);

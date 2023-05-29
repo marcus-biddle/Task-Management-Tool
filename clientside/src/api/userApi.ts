@@ -5,13 +5,14 @@ const baseUrl: string = 'https://mongodb-server-6t4m.onrender.com/api/users';
 export interface User {
     _id?: string;
     name: string;
-    email: string;
+    password: string;
   }
 
 // Get all users
-export const getUsers = async (): Promise<AxiosResponse<any>> => {
+export const getUsers = async () => {
   try {
-    const users: AxiosResponse<any> = await axios.get(baseUrl);
+    console.log('attempting to GET')
+    const users = await axios.get(baseUrl);
     console.log('getUsers api', users.data);
     return users;
   } catch (error) {
@@ -31,11 +32,11 @@ export const getUserById = async (userId: string): Promise<AxiosResponse<any>> =
 };
 
 // Create a new user
-export const createUser = async (userData: any): Promise<AxiosResponse<any>> => {
+export const createUser = async (userData: any) => {
   try {
-    const user: AxiosResponse<any> = await axios.post(baseUrl, userData);
+    const user = await axios.post(baseUrl, userData);
     console.log('createUser api', user.data);
-    return user;
+    return user.data;
   } catch (error) {
     throw new Error('Failed to create user');
   }

@@ -1,6 +1,6 @@
 import { Outlet, useParams } from 'react-router';
 import { Link } from 'react-router-dom';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useServerContext } from '../../hooks/contexts/ServerContext';
 import { Server } from '../../api/serverApi';
@@ -73,6 +73,26 @@ export const Sidebar = () => {
   const _id: string = id ? id : '';
   const [isOpen, setIsOpen] = useState(false);
   const [newServerTitle, setNewServerTitle] = useState('');
+  const [currentUser, setCurrentUser] = useState<any>(null);
+
+  useEffect(() => {
+    const checkLocalStorage = () => {
+      const storedUser = localStorage.getItem('currentUser');
+      if (storedUser) {
+        const parsedUser = JSON.parse(storedUser);
+        setCurrentUser(parsedUser);
+      } else {
+        setCurrentUser(null);
+      }
+    };
+  
+    const interval = setInterval(checkLocalStorage, 1000);
+  
+    // Clean up the interval on component unmount
+    return () => {
+      clearInterval(interval);
+    };
+  }, [currentUser]);
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -80,52 +100,60 @@ export const Sidebar = () => {
 
   const handleAddServer = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Add your logic to save the new server title
-    console.log('New Server Title:', newServerTitle);
-    const newServer: Server = { title: newServerTitle, createdBy: 1202, active: true }
-    await addServer(newServer);
-    // Reset the input field after saving
-    setNewServerTitle('');
+
+    if (currentUser) {
+      // Add your logic to save the new server title
+      console.log('New Server Title:', newServerTitle);
+      const newServer: Server = { title: newServerTitle, createdBy: 1202, active: true };
+      await addServer(newServer);
+      // Reset the input field after saving
+      setNewServerTitle('');
+    }
   };
 
   return (
     <>
-        <div style={{ display: 'flex'}}>
-            <div style={{ marginRight: '255px'}}>
-                <SidebarButton isOpen={isOpen} onClick={toggleSidebar}>
-                    {isOpen ? 'Close' : 'Open'}
-                </SidebarButton>
-                <SidebarContainer isOpen={isOpen}>
-                    <SidebarContent>
-                    <h2>Task Management Servers</h2>
-                    <p>Click on a server or create your own.</p>
-                    <AddServerForm onSubmit={handleAddServer}>
-                      <AddServerInput
-                        type="text"
-                        placeholder="Enter server title"
-                        value={newServerTitle}
-                        onChange={(e) => setNewServerTitle(e.target.value)}
-                      />
-                      <button type="submit">Create Server</button>
-                    </AddServerForm>
-                    
-                    <nav>
-                      <SidebarList>
-                        {servers.map((server, index) => (
-                          <SidebarListItem key={index}>
-                            <Link to={`servers/${server._id}`}>Server: {server.title}</Link>
-                          </SidebarListItem>
-                        ))}
-                      </SidebarList>
-                    </nav>
-                    </SidebarContent>
-                </SidebarContainer>
-            </div>
-            <div id="detail">
-                <Outlet />
-            </div>
+      <div style={{ display: 'flex' }}>
+        <div style={{ marginRight: '255px' }}>
+          <SidebarButton isOpen={isOpen} onClick={toggleSidebar}>
+            {isOpen ? 'Close' : 'Open'}
+          </SidebarButton>
+          <SidebarContainer isOpen={isOpen}>
+            <SidebarContent>
+              <Link to={'/'}>
+                <h2>Task Management Servers</h2>
+              </Link>
+              <p>{currentUser ? `Welcome ${currentUser.username}! Click on a server or create your own.` : 'Please sign in to use this feature.'}</p>
+              <AddServerForm onSubmit={handleAddServer}>
+                <AddServerInput
+                  type="text"
+                  placeholder="Enter server title"
+                  value={newServerTitle}
+                  onChange={(e) => setNewServerTitle(e.target.value)}
+                />
+                <button type="submit">Create Server</button>
+              </AddServerForm>
+
+              {currentUser ? (
+                <nav>
+                  <SidebarList>
+                    {servers.map((server, index) => (
+                      <SidebarListItem key={index}>
+                        <Link to={`servers/${server._id}`}>Server: {server.title}</Link>
+                      </SidebarListItem>
+                    ))}
+                  </SidebarList>
+                </nav>
+              ) : (
+                <></>
+              )}
+            </SidebarContent>
+          </SidebarContainer>
         </div>
-        
+        <div id="detail">
+          <Outlet />
+        </div>
+      </div>
     </>
-  )
+  );
 };

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { useUserContext } from '../../hooks/contexts/UserContext';
+import { User } from '../../api/userApi';
 
 const Container = styled.div`
   display: flex;
@@ -83,44 +85,53 @@ const LogoutButton = styled.button`
 `;
 
 const HomePage: React.FC = () => {
+    const { fetchUsers, addUser } = useUserContext();
     const [loggedIn, setLoggedIn] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [currentUser, setCurrentUser] = useState<any>(null);
+  const [users, setUsers] = useState<any>([]);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
+    const getUsers = async () => {
+        const response: User = await fetchUsers();
+        setUsers(response);
+    }
+
+    getUsers();
+
     const storedUser = localStorage.getItem('currentUser');
     if (storedUser) {
-      const parsedUser = JSON.parse(storedUser);
-      setCurrentUser(parsedUser);
+    //   const parsedUser = JSON.parse(storedUser);
+        // setUsername(parsedUser.username);
+        // setPassword(parsedUser.password);
+        setLoggedIn(true);
     }
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem('user');
-    setLoggedIn(false);
-    setUsername('');
-  };
+    const handleLogout = () => {
+        localStorage.removeItem('currentUser');
+        setLoggedIn(false);
+        setUsername('');
+    };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission, e.g., authenticate user and redirect to server and tasks page
-    console.log('Username:', username);
-    console.log('Password:', password);
-    // Add your authentication logic here
 
-    // Simulating the creation of a new user and storing the _id in local storage
     const newUser = {
-      _id: 'user123', // Replace with the actual _id value from your authentication logic
-      username: username,
+      name: username,
       password: password,
     };
-    localStorage.setItem('currentUser', JSON.stringify(newUser));
-    setLoggedIn(true);
-    setUsername(username);
 
-    // Redirect to the server and tasks page
-    // Add your navigation logic here
+    const exisitingUser = users.filter((user: User) => {
+        if (user.name === username && user.password) {
+            return user;
+        }
+    })
+    const response = await addUser(exisitingUser ? exisitingUser : newUser);
+    localStorage.setItem('currentUser', JSON.stringify(response));
+    setLoggedIn(true);
+    setUser(response);
   };
 
   return (

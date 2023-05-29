@@ -5,6 +5,7 @@ import { useNavigate, useParams } from 'react-router';
 import { useTaskContext } from '../../hooks/contexts/TaskContext';
 import { Task } from '../../api/taskApi';
 import { Server } from '../../api/serverApi';
+import { useUserContext } from '../../hooks/contexts/UserContext';
 
 const Container = styled.div`
   display: flex;
@@ -212,6 +213,7 @@ const UserItem = styled.li`
 export const ServerPage: React.FC = () => {
   const { getServer, updateServer, deleteServer } = useServerContext();
   const { tasks, fetchTasks, updateTask, addTask, deleteTask } = useTaskContext();
+  const { fetchUsers } = useUserContext();
   const { id } = useParams();
   const _id: string = id ? id : '';
   const [task, setTask] = useState<string>("");
@@ -222,6 +224,7 @@ export const ServerPage: React.FC = () => {
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [newServerTitle, setNewServerTitle] = useState('');
   const [users, setUsers] = useState<any>([]); // fix type
+  const [currentUser, setCurrentUser] = useState<any>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -236,15 +239,20 @@ export const ServerPage: React.FC = () => {
       }
     };
 
-    const fetchUsers = async () => {
+    const getUsers = async () => {
       // Perform the API request to fetch the users for the server
       try {
-        // Replace the placeholder logic with the actual API request
-        // const usersResponse = await getUsersForServer(server._id);
-        // setUsers(usersResponse);
+        const response = await fetchUsers();
+        setUsers(response);
       } catch (error) {
         console.error('Error fetching users:', error);
       }
+
+      const storedUser = localStorage.getItem('currentUser');
+    if (storedUser) {
+      const parsedUser = JSON.parse(storedUser);
+      setCurrentUser(parsedUser);
+    }
     };
   
     fetchServerAndTasks();
@@ -256,26 +264,29 @@ export const ServerPage: React.FC = () => {
   };
 
   const handleAddTask = async () => {
-    if (task.trim() !== '') {
-      if (editIndex !== null) {
-        // Editing existing task
-        const updatedTask: Task = { ...editIndex, description: task };
-        await updateTask(updatedTask);
-        const response = await fetchTasks(_id);
-        setServerTasks(response);
-        setEditIndex(null);
-      } else {
-        // Adding new task
-        const newTask: Task = { description: task, serverId: _id, userId: "0107" };
-        try {
-          const response = await addTask(newTask);
+    if (currentUser) {
+      if (task.trim() !== '') {
+        if (editIndex !== null) {
+          // Editing existing task
+          const updatedTask: Task = { ...editIndex, description: task };
+          await updateTask(updatedTask);
+          const response = await fetchTasks(_id);
           setServerTasks(response);
-        } catch (error) {
-          console.error('Error adding task:', error);
+          setEditIndex(null);
+        } else {
+          // Adding new task
+          const newTask: Task = { description: task, serverId: _id, userId: "0107" };
+          try {
+            const response = await addTask(newTask);
+            setServerTasks(response);
+          } catch (error) {
+            console.error('Error adding task:', error);
+          }
         }
+        setTask('');
       }
-      setTask('');
     }
+    
   };
 
   const handleDeleteTask = async (task: Task) => {
@@ -362,7 +373,7 @@ export const ServerPage: React.FC = () => {
           <AddButton onClick={handleAddTask}>{editIndex !== null ? 'Save' : 'Add'}</AddButton>
         </InputContainer>
         <TaskList>
-          {serverTasks ? (
+          {serverTasks && currentUser ? (
             serverTasks.map((task: Task, index) => {
               return (
                 <TaskItem key={index}>
@@ -380,7 +391,7 @@ export const ServerPage: React.FC = () => {
               
             })
           ) : (
-            <p>No tasks</p>
+            <p>Please sign in to view any Tasks in this server</p>
           )} 
         </TaskList>
       </MainContent>
