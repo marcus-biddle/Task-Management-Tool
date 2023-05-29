@@ -14,8 +14,8 @@ export const getUsers = async () => {
     const users = await axios.get(baseUrl);
     console.log('getUsers api', users.data);
     return users;
-  } catch (error: any) {
-    throw new Error('Failed to fetch users', error);
+  } catch (error) {
+    throw new Error('Failed to fetch users');
   }
 };
 
