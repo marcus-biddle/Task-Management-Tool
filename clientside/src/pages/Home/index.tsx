@@ -67,7 +67,23 @@ const Form = styled.form`
   }
 `;
 
+const LogoutButton = styled.button`
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #dc3545;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #c82333;
+  }
+`;
+
 const HomePage: React.FC = () => {
+    const [loggedIn, setLoggedIn] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [currentUser, setCurrentUser] = useState<any>(null);
@@ -79,6 +95,12 @@ const HomePage: React.FC = () => {
       setCurrentUser(parsedUser);
     }
   }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    setLoggedIn(false);
+    setUsername('');
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -94,39 +116,36 @@ const HomePage: React.FC = () => {
       password: password,
     };
     localStorage.setItem('currentUser', JSON.stringify(newUser));
-    setCurrentUser(newUser);
+    setLoggedIn(true);
+    setUsername(username);
 
     // Redirect to the server and tasks page
     // Add your navigation logic here
   };
-
-  if (currentUser) {
-    return (
-      <Container>
-        <FormContainer>
-          <WelcomeMessage>Welcome {currentUser.username}!</WelcomeMessage>
-          {/* Add other details that a user would want to see on the homepage */}
-        </FormContainer>
-      </Container>
-    );
-  }
 
   return (
     <Container>
       <FormContainer>
         <Title>Task Management Website</Title>
         <Description>Manage your tasks efficiently and stay organized.</Description>
-        <Form onSubmit={handleSubmit}>
-          <div>
-            <label htmlFor="username">Username:</label>
-            <input type="text" id="username" value={username} onChange={(e) => setUsername(e.target.value)} required />
-          </div>
-          <div>
-            <label htmlFor="password">Password:</label>
-            <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-          </div>
-          <button type="submit">Sign In</button>
-        </Form>
+        {!loggedIn ? (
+          <Form onSubmit={handleSubmit}>
+            <div>
+              <label htmlFor="username">Username:</label>
+              <input type="text" id="username" value={username} onChange={(e) => setUsername(e.target.value)} required />
+            </div>
+            <div>
+              <label htmlFor="password">Password:</label>
+              <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+            </div>
+            <button type="submit">Sign In</button>
+          </Form>
+        ) : (
+          <>
+            <p>Welcome {username}!</p>
+            <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
+          </>
+        )}
       </FormContainer>
     </Container>
   );
