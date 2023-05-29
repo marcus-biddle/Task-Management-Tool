@@ -11,7 +11,6 @@ export interface User {
 // Get all users
 export const getUsers = async () => {
   try {
-    console.log('attempting to GET')
     const users = await axios.get(baseUrl);
     console.log('getUsers api', users.data);
     return users;
