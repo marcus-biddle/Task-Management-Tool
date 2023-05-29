@@ -32,7 +32,7 @@ export const getUserById = async (userId: string): Promise<AxiosResponse<any>> =
 // Create a new user
 export const createUser = async (userData: any) => {
   try {
-    const user = await axios.post(baseUrl, userData);
+    const user = await axios.post(baseUrl + '-create', userData);
     console.log('createUser api', user.data);
     return user.data;
   } catch (error) {
