@@ -11,6 +11,8 @@ import { Sidebar } from './components/Sidebar';
 import { ErrorPage } from './components/Error';
 import { ServerProvider } from './hooks/contexts/ServerContext';
 import { TaskProvider } from './hooks/contexts/TaskContext';
+import { UserProvider } from './hooks/contexts/UserContext';
+import HomePage from './pages/Home';
 
 const router = createBrowserRouter([
   {
@@ -20,7 +22,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <App />,
+        element: <HomePage />,
       },
       {
         path: 'servers/:id',
@@ -34,9 +36,11 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
+  <UserProvider>
     <ServerProvider>
       <TaskProvider>
         <RouterProvider router={router} />
       </TaskProvider>
-    </ServerProvider> 
+    </ServerProvider>
+  </UserProvider>
 );

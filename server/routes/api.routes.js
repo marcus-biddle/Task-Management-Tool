@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { getServers, addServer, updateServer, deleteServer, getServer } from '../controllers/server.controller.js';
 import { getTasks, addTask, updateTask, deleteTask } from '../controllers/task.controller.js';
+import { createUser, deleteUser, getUserById, updateUser } from '../controllers/user.controller.js';
 
 const router = Router();
 
@@ -16,5 +17,11 @@ router.get("/tasks", getTasks);
 router.post('/add-task', addTask);
 router.put('/edit-task/:id', updateTask);
 router.delete('/delete-task/:id', deleteTask);
+
+// User Routes
+router.post('/users', createUser);
+router.get('/users/:id', getUserById);
+router.put('/users/:id', updateUser);
+router.delete('/users/:id', deleteUser);
 
 export default router;

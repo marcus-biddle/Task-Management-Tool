@@ -18,7 +18,6 @@ export const getTasks = async (serverId: string): Promise<AxiosResponse<any>> =>
     const tasks = await axios.get(`${baseUrl}/tasks`, {
       params: { serverId },
     });
-    console.log('getTasks api', serverId, tasks.data);
     return tasks;
   } catch (error) {
     throw new Error("Failed to fetch tasks");

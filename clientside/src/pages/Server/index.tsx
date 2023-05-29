@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useServerContext } from '../../hooks/contexts/ServerContext';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { useTaskContext } from '../../hooks/contexts/TaskContext';
 import { Task } from '../../api/taskApi';
 import { Server } from '../../api/serverApi';
@@ -9,6 +9,7 @@ import { Server } from '../../api/serverApi';
 const Container = styled.div`
   display: flex;
   position: relative;
+  padding-left: 10rem;
 `;
 
 const MainContent = styled.div`
@@ -21,7 +22,7 @@ const MainContent = styled.div`
 const Sidebar = styled.div<{ isOpen: boolean }>`
   position: absolute;
   height: 100vh;
-  right: ${({ isOpen }) => (isOpen ? '-13rem' : '-215px')};
+  right: ${({ isOpen }) => (isOpen ? '-15.25rem' : '-195px')};
   width: 300px;
   background-color: #f5f5f5;
   padding: 20px;
@@ -30,6 +31,9 @@ const Sidebar = styled.div<{ isOpen: boolean }>`
   bottom: 0;
   opacity: ${({ isOpen }) => (isOpen ? '1' : '0')};
   visibility: ${({ isOpen }) => (isOpen ? 'visible' : 'hidden')};
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 
   @media (max-width: 768px) {
     width: 100%;
@@ -56,26 +60,7 @@ const SidebarTitle = styled.h2`
   margin-bottom: 10px;
 `;
 
-const SidebarButton = styled.button`
-  padding: 10px;
-  font-size: 16px;
-  color: #fff;
-  background-color: #0070f3;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
-
-  &:hover {
-    background-color: #0058cc;
-  }
-`;
-
-const SidebarAccordion = styled.div`
-  margin-bottom: 10px;
-`;
-
-const AccordionContent = styled.div`
+const ActionContent = styled.div`
   margin-top: 10px;
 `;
 
@@ -214,8 +199,18 @@ const ServerSettingsButton = styled.button<{ isOpen: boolean }>`
   }
 `;
 
+const UserList = styled.ul`
+  list-style: none;
+  padding: 0;
+  margin: 0;
+`;
+
+const UserItem = styled.li`
+  margin-bottom: 8px;
+`;
+
 export const ServerPage: React.FC = () => {
-  const { getServer, updateServer } = useServerContext();
+  const { getServer, updateServer, deleteServer } = useServerContext();
   const { tasks, fetchTasks, updateTask, addTask, deleteTask } = useTaskContext();
   const { id } = useParams();
   const _id: string = id ? id : '';
@@ -226,21 +221,34 @@ export const ServerPage: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [newServerTitle, setNewServerTitle] = useState('');
+  const [users, setUsers] = useState<any>([]); // fix type
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchServerAndTasks = async () => {
       try {
         const response: Server = await getServer(_id);
         const taskResponse: any = await fetchTasks(_id);
-        console.log('taskResponse', taskResponse);
         setServer(response);
         setServerTasks(taskResponse);
       } catch (error) {
         console.error('Error fetching server:', error);
       }
     };
+
+    const fetchUsers = async () => {
+      // Perform the API request to fetch the users for the server
+      try {
+        // Replace the placeholder logic with the actual API request
+        // const usersResponse = await getUsersForServer(server._id);
+        // setUsers(usersResponse);
+      } catch (error) {
+        console.error('Error fetching users:', error);
+      }
+    };
   
     fetchServerAndTasks();
+    fetchUsers();
   }, [_id]); 
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -252,7 +260,8 @@ export const ServerPage: React.FC = () => {
       if (editIndex !== null) {
         // Editing existing task
         const updatedTask: Task = { ...editIndex, description: task };
-        const response = await updateTask(updatedTask);
+        await updateTask(updatedTask);
+        const response = await fetchTasks(_id);
         setServerTasks(response);
         setEditIndex(null);
       } else {
@@ -287,6 +296,8 @@ export const ServerPage: React.FC = () => {
   const handleServerDelete = async () => {
     try {
       // Delete server logic here
+      navigate("/");
+      await deleteServer(_id);
     } catch (error) {
       console.error('Error deleting server:', error);
     }
@@ -317,7 +328,7 @@ export const ServerPage: React.FC = () => {
   
     // Perform the server update request
     try {
-      const response = await updateServer(newServer);
+      await updateServer(newServer);
     } catch (error) {
       console.error('Error updating server title:', error);
     }
@@ -374,9 +385,9 @@ export const ServerPage: React.FC = () => {
         </TaskList>
       </MainContent>
       <Sidebar isOpen={isOpen}>
-        <SidebarAccordion>
-          <h1>Server - {server.title}</h1>
-            <AccordionContent>
+          
+            <ActionContent>
+            <h1>Server - {server.title}</h1>
               {isEditingTitle ? (
                 <div>
                   <EditServerTitleInput
@@ -394,12 +405,17 @@ export const ServerPage: React.FC = () => {
                 </div>
               )}
               <ActionButton onClick={handleServerDelete}>Delete Server</ActionButton>
-              <SidebarTitle>Appearance</SidebarTitle>
-              <ActionButton onClick={handleColorChange}>Change Color</ActionButton>
               <SidebarTitle>Users</SidebarTitle>
-              <ActionButton onClick={handleViewUsers}>View Users</ActionButton>
-            </AccordionContent>
-        </SidebarAccordion>
+              <UserList>
+                {users.length > 0 ? (
+                  <></>
+                  // users.map((user) => <UserItem key={user.id}>{user.name}</UserItem>)
+                ) : (
+                  <p>No users</p>
+                )}
+              </UserList>
+            </ActionContent>
+        <p>Created by User #{server.createdBy}</p>
       </Sidebar>
     </Container>
   );
