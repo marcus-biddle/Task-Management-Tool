@@ -19,7 +19,7 @@ router.put('/edit-task/:id', updateTask);
 router.delete('/delete-task/:id', deleteTask);
 
 // User Routes
-router.post('/users', getUsers);
+router.get('/users', getUsers);
 router.get('/users/:id', getUserById);
 router.put('/users/:id', updateUser);
 router.delete('/users/:id', deleteUser);
