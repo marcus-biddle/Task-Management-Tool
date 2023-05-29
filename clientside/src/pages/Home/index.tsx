@@ -89,13 +89,14 @@ const HomePage: React.FC = () => {
     const [loggedIn, setLoggedIn] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [users, setUsers] = useState<any>([]);
-  const [user, setUser] = useState(null);
+  const [users, setUsers] = useState<User[]>([]);
+  const [user, setUser] = useState<User>();
 
   useEffect(() => {
     const getUsers = async () => {
-        const response: User = await fetchUsers();
+        const response: User[] = await fetchUsers();
         setUsers(response);
+        console.log('useEffect user', users);
     }
 
     getUsers();
@@ -115,24 +116,31 @@ const HomePage: React.FC = () => {
         setUsername('');
     };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+      
+        const newUser = {
+          name: username,
+          password: password,
+        };
 
-    const newUser = {
-      name: username,
-      password: password,
-    };
-
-    const exisitingUser = users.filter((user: User) => {
-        if (user.name === username && user.password) {
-            return user;
+        if (!users.length) {
+            console.log('there are no users in database.');
+            const response = await addUser(newUser);
+            console.log('submit user with no existing users', response);
+            setLoggedIn(true);
+            setUser(response);
+        } else if (users.length > 0) {
+            const existingUser = users.filter((user: User) => user.name === username && user.password === password);
+            console.log('exisiting user', existingUser, existingUser[0]);
+            setLoggedIn(true);
+            setUser(existingUser[0]);
+        } else {
+          // Handle authentication failure, show error message, etc.
+          console.log('Authentication failed');
         }
-    })
-    const response = await addUser(exisitingUser ? exisitingUser : newUser);
-    localStorage.setItem('currentUser', JSON.stringify(response));
-    setLoggedIn(true);
-    setUser(response);
-  };
+      };
+      
 
   return (
     <Container>

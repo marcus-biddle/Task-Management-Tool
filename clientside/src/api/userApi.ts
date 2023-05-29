@@ -12,7 +12,6 @@ export interface User {
 export const getUsers = async () => {
   try {
     const users = await axios.get(baseUrl);
-    console.log('getUsers api', users.data);
     return users;
   } catch (error) {
     throw new Error('Failed to fetch users');

@@ -11,7 +11,7 @@ import {
 
 interface UserContextType {
   users: any[]; // Modify the type to match your user data structure
-  fetchUsers: () => Promise<User>;
+  fetchUsers: () => Promise<User[]>;
   fetchUserById: (userId: string) => Promise<void>;
   addUser: (userData: any) => Promise<any>; // Modify the type to match your user data structure
   updateUserById: (userId: string, userData: any) => Promise<void>; // Modify the type to match your user data structure
@@ -20,16 +20,17 @@ interface UserContextType {
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
-  const [users, setUsers] = useState<any[]>([]); // Modify the type to match your user data structure
+  const [users, setUsers] = useState<User[]>([]); // Modify the type to match your user data structure
 
-  const fetchUsers = async () => {
+  const fetchUsers = async (): Promise<User[]> => {
     try {
       const response = await getUsers();
-      console.log('fetchUsers response', response);
       setUsers(response.data);
-      return response.data;
+      console.log('context users', users);
+      return users;
     } catch (error) {
       console.error('Error fetching users:', error);
+      return []
     }
   };
 
@@ -47,11 +48,6 @@ export const UserProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 
   const addUser = async (userData: any) => {
     try {
-      const existingUser = users.filter(user => user._id === userData._id);
-      if (existingUser) {
-        console.log('exisiting user found:', existingUser);
-        return existingUser;
-      }
       const response: User = await createUser(userData);
       console.log('response', response);
       return response;
