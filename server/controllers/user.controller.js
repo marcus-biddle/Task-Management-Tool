@@ -70,6 +70,3 @@ export const deleteUser = async (req, res) => {
     res.status(500).json({ error: 'Failed to delete user' });
   }
 };
-
-
-export { createUser, getUserById, updateUser, deleteUser };
