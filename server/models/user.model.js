@@ -1,9 +1,7 @@
-import mongoose from 'mongoose';
-
-const { Schema, model } = mongoose;
+import { model, Schema } from 'mongoose';
 
 const userSchema = new Schema({
-    _id: { type: mongoose.Schema.Types.ObjectId, auto: true },
+    _id: { type: Schema.Types.ObjectId, auto: true },
     username: { type: String, required: true },
     password: { type: String, required: true },
     createdAt: { type: Date, default: Date.now },
