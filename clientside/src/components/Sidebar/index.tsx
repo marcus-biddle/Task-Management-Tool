@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useServerContext } from '../../hooks/contexts/ServerContext';
+import { Server } from '../../api/serverApi';
 
 const SidebarContainer = styled.div<{ isOpen: boolean }>`
   position: fixed;
@@ -77,11 +78,12 @@ export const Sidebar = () => {
     setIsOpen(!isOpen);
   };
 
-  const handleAddServer = (e: React.FormEvent) => {
+  const handleAddServer = async (e: React.FormEvent) => {
     e.preventDefault();
     // Add your logic to save the new server title
     console.log('New Server Title:', newServerTitle);
-    addServer()
+    const newServer: Server = { title: newServerTitle, createdBy: 1202, active: true }
+    await addServer(newServer);
     // Reset the input field after saving
     setNewServerTitle('');
   };

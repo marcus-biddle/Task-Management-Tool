@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Server, useServerContext } from '../../hooks/contexts/ServerContext';
+import { useServerContext } from '../../hooks/contexts/ServerContext';
 import { useParams } from 'react-router';
 import { useTaskContext } from '../../hooks/contexts/TaskContext';
 import { Task } from '../../api/taskApi';
+import { Server } from '../../api/serverApi';
 
 const Container = styled.div`
   display: flex;
@@ -227,19 +228,20 @@ export const ServerPage: React.FC = () => {
   const [newServerTitle, setNewServerTitle] = useState('');
 
   useEffect(() => {
-    const fetchServer = async () => {
+    const fetchServerAndTasks = async () => {
       try {
         const response: Server = await getServer(_id);
         const taskResponse: any = await fetchTasks(_id);
+        console.log('taskResponse', taskResponse);
         setServer(response);
         setServerTasks(taskResponse);
       } catch (error) {
         console.error('Error fetching server:', error);
       }
     };
-
-    fetchServer();
-  }, []);
+  
+    fetchServerAndTasks();
+  }, [_id]); 
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTask(e.target.value);

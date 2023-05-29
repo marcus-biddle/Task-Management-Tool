@@ -17,6 +17,7 @@ export const TaskProvider: React.FC<React.PropsWithChildren<{}>> = ({ children }
   const fetchTasks = async (serverId: string): Promise<Task[]> => {
     try {
       const { status, data } = await getTasks(serverId);
+      setTasks(data.tasks);
       return data.tasks;
     } catch (error) {
       console.error('Error fetching tasks:', error);

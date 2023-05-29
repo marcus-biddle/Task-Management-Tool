@@ -1,8 +1,6 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import { getServers, addServer, updateServer, deleteServer, getServer, Server } from '../../api/serverApi';
 
-
-
 interface ServerContextType {
   servers: Server[];
   addServer: (formData: any) => Promise<void>;
