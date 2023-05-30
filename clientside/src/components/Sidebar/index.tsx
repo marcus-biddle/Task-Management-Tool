@@ -104,7 +104,7 @@ export const Sidebar = () => {
     if (currentUser) {
       // Add your logic to save the new server title
       console.log('New Server Title:', newServerTitle);
-      const newServer: Server = { title: newServerTitle, createdBy: 1202, active: true };
+      const newServer: Server = { title: newServerTitle, createdBy: currentUser.username, active: true };
       await addServer(newServer);
       // Reset the input field after saving
       setNewServerTitle('');

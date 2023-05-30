@@ -5,7 +5,7 @@ const baseUrl: string = 'https://mongodb-server-6t4m.onrender.com/api';
 export interface Server {
   _id?: string;
   title: string;
-  createdBy?: number;
+  createdBy?: string;
   active?: boolean; //Instead of deleting, can soft delete
 }
 

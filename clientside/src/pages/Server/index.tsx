@@ -213,7 +213,7 @@ const UserItem = styled.li`
 export const ServerPage: React.FC = () => {
   const { getServer, updateServer, deleteServer } = useServerContext();
   const { tasks, fetchTasks, updateTask, addTask, deleteTask } = useTaskContext();
-  const { fetchUsers } = useUserContext();
+  const { users } = useUserContext();
   const { id } = useParams();
   const _id: string = id ? id : '';
   const [task, setTask] = useState<string>("");
@@ -223,7 +223,7 @@ export const ServerPage: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [newServerTitle, setNewServerTitle] = useState('');
-  const [users, setUsers] = useState<any>([]); // fix type
+  // const [users, setUsers] = useState<any>([]); // fix type
   const [currentUser, setCurrentUser] = useState<any>(null);
   const navigate = useNavigate();
 
@@ -239,24 +239,13 @@ export const ServerPage: React.FC = () => {
       }
     };
 
-    const getUsers = async () => {
-      // Perform the API request to fetch the users for the server
-      try {
-        const response = await fetchUsers();
-        setUsers(response);
-      } catch (error) {
-        console.error('Error fetching users:', error);
-      }
-
       const storedUser = localStorage.getItem('currentUser');
     if (storedUser) {
       const parsedUser = JSON.parse(storedUser);
       setCurrentUser(parsedUser);
     }
-    };
   
     fetchServerAndTasks();
-    fetchUsers();
   }, [_id]); 
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

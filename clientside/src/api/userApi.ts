@@ -3,8 +3,8 @@ import axios, { AxiosResponse } from 'axios';
 const baseUrl: string = 'https://mongodb-server-6t4m.onrender.com/api/users';
 
 export interface User {
-    _id?: string;
-    name: string;
+    _id: string;
+    username: string;
     password: string;
   }
 
@@ -12,7 +12,7 @@ export interface User {
 export const getUsers = async () => {
   try {
     const users = await axios.get(baseUrl);
-    return users;
+    return users.data.users;
   } catch (error) {
     throw new Error('Failed to fetch users');
   }
@@ -33,8 +33,8 @@ export const getUserById = async (userId: string): Promise<AxiosResponse<any>> =
 export const createUser = async (userData: any) => {
   try {
     const user = await axios.post(baseUrl + '-create', userData);
-    console.log('createUser api', user.data);
-    return user.data;
+    console.log('createUser api', user.data.user);
+    return user.data.user;
   } catch (error) {
     throw new Error('Failed to create user');
   }

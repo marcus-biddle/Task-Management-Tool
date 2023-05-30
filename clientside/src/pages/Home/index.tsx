@@ -85,56 +85,68 @@ const LogoutButton = styled.button`
 `;
 
 const HomePage: React.FC = () => {
-    const { fetchUsers, addUser } = useUserContext();
+    const { addUser, users } = useUserContext();
     const [loggedIn, setLoggedIn] = useState(false);
-  const [username, setUsername] = useState('');
+  const [username, setCurrentUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [users, setUsers] = useState<User[]>([]);
-  const [user, setUser] = useState<User>();
+//   const [users, setCurrentUsers] = useState<User[]>([]);
+  const [currentUser, setCurrentUser] = useState<User>();
 
   useEffect(() => {
-    const getUsers = async () => {
-        const response: User[] = await fetchUsers();
-        setUsers(response);
-        console.log('useEffect user', users);
-    }
+    // const getUsers = async () => {
+    //     const response: User[] = await fetchUsers();
+    //     setCurrentUsers(response);
+    //     console.log('useEffect user', users);
+    // }
 
-    getUsers();
-
+    // getUsers();
+    console.log('useEffect users', users);
     const storedUser = localStorage.getItem('currentUser');
     if (storedUser) {
-    //   const parsedUser = JSON.parse(storedUser);
-        // setUsername(parsedUser.username);
+        const parsedUser = JSON.parse(storedUser);
+        // setCurrentUsername(parsedUser.username);
         // setPassword(parsedUser.password);
         setLoggedIn(true);
+        setCurrentUser(parsedUser);
     }
-  }, []);
+  }, [users]);
 
     const handleLogout = () => {
         localStorage.removeItem('currentUser');
         setLoggedIn(false);
-        setUsername('');
+        setCurrentUsername('');
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
       
         const newUser = {
-          name: username,
+          username: username,
           password: password,
         };
 
         if (!users.length) {
             console.log('there are no users in database.');
             const response = await addUser(newUser);
-            console.log('submit user with no existing users', response);
             setLoggedIn(true);
-            setUser(response);
+            setCurrentUser(response);
+            localStorage.setItem('currentUser', JSON.stringify(response));
+
         } else if (users.length > 0) {
-            const existingUser = users.filter((user: User) => user.name === username && user.password === password);
-            console.log('exisiting user', existingUser, existingUser[0]);
-            setLoggedIn(true);
-            setUser(existingUser[0]);
+            const existingUser: User[] = users.filter((user: User) => user.username === username && user.password === password);
+            if (existingUser.length === 0) {
+                console.log('cannot find existing user:', existingUser)
+                const response = await addUser(newUser);
+                setLoggedIn(true);
+                setCurrentUser(response);
+                localStorage.setItem('currentUser', JSON.stringify(response));
+            } else {
+                console.log('user found:', existingUser);
+                setLoggedIn(true);
+                setCurrentUser(existingUser[0]);
+                localStorage.setItem('currentUser', JSON.stringify(existingUser[0]));
+            }
+            
         } else {
           // Handle authentication failure, show error message, etc.
           console.log('Authentication failed');
@@ -145,13 +157,13 @@ const HomePage: React.FC = () => {
   return (
     <Container>
       <FormContainer>
-        <Title>Task Management Website</Title>
+        <Title>Task Management System</Title>
         <Description>Manage your tasks efficiently and stay organized.</Description>
         {!loggedIn ? (
           <Form onSubmit={handleSubmit}>
             <div>
               <label htmlFor="username">Username:</label>
-              <input type="text" id="username" value={username} onChange={(e) => setUsername(e.target.value)} required />
+              <input type="text" id="username" value={username} onChange={(e) => setCurrentUsername(e.target.value)} required />
             </div>
             <div>
               <label htmlFor="password">Password:</label>
@@ -161,7 +173,7 @@ const HomePage: React.FC = () => {
           </Form>
         ) : (
           <>
-            <p>Welcome {username}!</p>
+            <p>Welcome {currentUser?.username}!</p>
             <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
           </>
         )}
