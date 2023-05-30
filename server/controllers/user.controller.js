@@ -71,7 +71,8 @@ export const deleteUser = async (req, res) => {
     if (!deletedUser) {
       return res.status(404).json({ error: 'User not found' });
     }
-    res.status(200).json({ user: deletedUser });
+    const users = await User.find();
+    res.status(200).json({ user: deletedUser, users: users });
   } catch (err) {
     console.error('Error deleting user:', err);
     res.status(500).json({ error: 'Failed to delete user' });

@@ -84,28 +84,28 @@ const LogoutButton = styled.button`
   }
 `;
 
+const DeleteButton = styled.button`
+  background-color: #ff0000;
+  color: #ffffff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+`;
+
 const HomePage: React.FC = () => {
-    const { addUser, users } = useUserContext();
+    const { addUser, removeUserById ,users } = useUserContext();
     const [loggedIn, setLoggedIn] = useState(false);
   const [username, setCurrentUsername] = useState('');
   const [password, setPassword] = useState('');
-//   const [users, setCurrentUsers] = useState<User[]>([]);
   const [currentUser, setCurrentUser] = useState<User>();
+  const [returningUser, setReturningUser] = useState(false);
 
   useEffect(() => {
-    // const getUsers = async () => {
-    //     const response: User[] = await fetchUsers();
-    //     setCurrentUsers(response);
-    //     console.log('useEffect user', users);
-    // }
-
-    // getUsers();
     console.log('useEffect users', users);
     const storedUser = localStorage.getItem('currentUser');
     if (storedUser) {
         const parsedUser = JSON.parse(storedUser);
-        // setCurrentUsername(parsedUser.username);
-        // setPassword(parsedUser.password);
         setLoggedIn(true);
         setCurrentUser(parsedUser);
     }
@@ -116,6 +116,11 @@ const HomePage: React.FC = () => {
         setLoggedIn(false);
         setCurrentUsername('');
     };
+
+    const handleDelete = async () => {
+        const id = currentUser ? currentUser._id : '';
+        await removeUserById(id);
+    }
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -142,6 +147,7 @@ const HomePage: React.FC = () => {
                 localStorage.setItem('currentUser', JSON.stringify(response));
             } else {
                 console.log('user found:', existingUser);
+                setReturningUser(true);
                 setLoggedIn(true);
                 setCurrentUser(existingUser[0]);
                 localStorage.setItem('currentUser', JSON.stringify(existingUser[0]));
@@ -173,8 +179,9 @@ const HomePage: React.FC = () => {
           </Form>
         ) : (
           <>
-            <p>Welcome {currentUser?.username}!</p>
+            <p>{returningUser? 'Welcome back,' : 'Thanks for joining,'} {currentUser?.username}!</p>
             <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
+            <DeleteButton onClick={handleDelete}>Delete</DeleteButton>
           </>
         )}
       </FormContainer>

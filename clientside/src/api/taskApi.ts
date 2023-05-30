@@ -9,7 +9,7 @@ export interface Task {
   userId: string;
   serverId: string;
   createdAt?: string;
-  updatedAt?: string;
+  updatedAt: string;
   __v?: number;
 }
 

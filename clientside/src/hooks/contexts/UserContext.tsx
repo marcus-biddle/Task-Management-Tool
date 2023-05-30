@@ -64,8 +64,9 @@ export const UserProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 
   const removeUserById = async (userId: string) => {
     try {
-      const response: AxiosResponse<any> = await deleteUser(userId);
-      // Handle the deletion response as needed
+      const { user, users} = await deleteUser(userId);
+      console.log("Deleted user:", user);
+      setUsers(users);
     } catch (error) {
       console.error('Error deleting user:', error);
     }

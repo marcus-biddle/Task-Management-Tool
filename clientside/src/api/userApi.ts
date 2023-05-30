@@ -52,11 +52,10 @@ export const updateUser = async (userId: string, userData: any): Promise<AxiosRe
 };
 
 // Delete user by ID
-export const deleteUser = async (userId: string): Promise<AxiosResponse<any>> => {
+export const deleteUser = async (userId: string) => {
   try {
     const user: AxiosResponse<any> = await axios.delete(`${baseUrl}/${userId}`);
-    console.log('deleteUser api', user.data);
-    return user;
+    return user.data;
   } catch (error) {
     throw new Error('Failed to delete user');
   }

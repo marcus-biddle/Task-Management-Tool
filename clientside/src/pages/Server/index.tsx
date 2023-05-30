@@ -6,6 +6,9 @@ import { useTaskContext } from '../../hooks/contexts/TaskContext';
 import { Task } from '../../api/taskApi';
 import { Server } from '../../api/serverApi';
 import { useUserContext } from '../../hooks/contexts/UserContext';
+import { getName, getNamesInServer } from '../../helpers/api';
+import { formatDateTime } from '../../helpers/random';
+import { User } from '../../api/userApi';
 
 const Container = styled.div`
   display: flex;
@@ -22,14 +25,13 @@ const MainContent = styled.div`
 
 const Sidebar = styled.div<{ isOpen: boolean }>`
   position: absolute;
-  height: 100vh;
+  height: 95vh;
   right: ${({ isOpen }) => (isOpen ? '-15.25rem' : '-195px')};
   width: 300px;
   background-color: #f5f5f5;
   padding: 20px;
   transition: right 0.3s ease-in-out;
-  top: -17rem;
-  bottom: 0;
+  top: -19.25rem;
   opacity: ${({ isOpen }) => (isOpen ? '1' : '0')};
   visibility: ${({ isOpen }) => (isOpen ? 'visible' : 'hidden')};
   display: flex;
@@ -39,7 +41,7 @@ const Sidebar = styled.div<{ isOpen: boolean }>`
   @media (max-width: 768px) {
     width: 100%;
     max-width: 300px;
-    height: 100vh;
+    height: 95vh;
   }
 `;
 
@@ -47,7 +49,6 @@ const TitleContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 20px;
 `;
 
 const ServerTitle = styled.h1`
@@ -226,6 +227,7 @@ export const ServerPage: React.FC = () => {
   // const [users, setUsers] = useState<any>([]); // fix type
   const [currentUser, setCurrentUser] = useState<any>(null);
   const navigate = useNavigate();
+  const names = getNamesInServer(serverTasks, users);
 
   useEffect(() => {
     const fetchServerAndTasks = async () => {
@@ -264,7 +266,7 @@ export const ServerPage: React.FC = () => {
           setEditIndex(null);
         } else {
           // Adding new task
-          const newTask: Task = { description: task, serverId: _id, userId: "0107" };
+          const newTask: Task = { description: task, serverId: _id, userId: currentUser._id, updatedAt: '' };
           try {
             const response = await addTask(newTask);
             setServerTasks(response);
@@ -364,6 +366,8 @@ export const ServerPage: React.FC = () => {
         <TaskList>
           {serverTasks && currentUser ? (
             serverTasks.map((task: Task, index) => {
+              const name = getName(users, task.userId) ? getName(users, task.userId) : { username: currentUser.username };
+              const time = formatDateTime(task.updatedAt);
               return (
                 <TaskItem key={index}>
                   <TaskContent>
@@ -372,8 +376,8 @@ export const ServerPage: React.FC = () => {
                     <DeleteButton onClick={() => handleDeleteTask(task)}>Delete</DeleteButton>
                   </TaskContent>
                   <TaskInfo>
-                    <span>Author: John Doe</span>
-                    <span>at 10:00 AM</span>
+                    <span>{task.serverId ? name.username : ''}</span>
+                    <span> at {time}</span>
                   </TaskInfo>
                 </TaskItem>
               )
@@ -385,7 +389,6 @@ export const ServerPage: React.FC = () => {
         </TaskList>
       </MainContent>
       <Sidebar isOpen={isOpen}>
-          
             <ActionContent>
             <h1>Server - {server.title}</h1>
               {isEditingTitle ? (
@@ -407,15 +410,18 @@ export const ServerPage: React.FC = () => {
               <ActionButton onClick={handleServerDelete}>Delete Server</ActionButton>
               <SidebarTitle>Users</SidebarTitle>
               <UserList>
-                {users.length > 0 ? (
-                  <></>
-                  // users.map((user) => <UserItem key={user.id}>{user.name}</UserItem>)
+                {names ? (
+                  names.map((name, index) => {
+                    return (
+                      <UserItem key={index}>{name}</UserItem>
+                    )
+                })
                 ) : (
                   <p>No users</p>
                 )}
               </UserList>
             </ActionContent>
-        <p>Created by User #{server.createdBy}</p>
+        <p>Created by User {server.createdBy}</p>
       </Sidebar>
     </Container>
   );
