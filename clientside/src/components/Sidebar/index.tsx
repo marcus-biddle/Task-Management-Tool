@@ -4,7 +4,15 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useServerContext } from '../../hooks/contexts/ServerContext';
 import { Server } from '../../api/serverApi';
+import { LogoutButton } from '../../pages/Home';
 
+const Container = styled.div`
+  margin-right: 255px;
+
+  @media (max-width: 768px) {
+    margin-right: 1.75rem;
+  }
+`;
 const SidebarContainer = styled.div<{ isOpen: boolean }>`
   position: fixed;
   top: 0;
@@ -13,6 +21,12 @@ const SidebarContainer = styled.div<{ isOpen: boolean }>`
   height: 100vh;
   background-color: #f0f0f0;
   transition: left 0.3s ease-in-out;
+
+  @media (max-width: 768px) {
+    z-index: 90;
+    width: 300px;
+    left: ${({ isOpen }) => (isOpen ? '0' : '-100%')};
+  }
 `;
 
 const SidebarButton = styled.button<{ isOpen: boolean }>`
@@ -20,8 +34,9 @@ const SidebarButton = styled.button<{ isOpen: boolean }>`
   top: 10px;
   left: ${({ isOpen }) => (isOpen ? '350px' : '10px')};
   width: 30px;
-  height: 30px;
-  background-color: #f0f0f0;
+  height: 40px;
+  font-size: 32px;
+  background-color: transparent;
   border: none;
   border-radius: 2px;
   display: flex;
@@ -29,6 +44,11 @@ const SidebarButton = styled.button<{ isOpen: boolean }>`
   justify-content: center;
   cursor: pointer;
   transition: left 0.3s ease-in-out;
+
+  @media (max-width: 768px) {
+    z-index: 100;
+    left: ${({ isOpen }) => (isOpen ? 'calc(100% - 85px)' : '10px')};
+  }
 `;
 
 const SidebarContent = styled.div`
@@ -38,6 +58,11 @@ const SidebarContent = styled.div`
 const AddServerForm = styled.form`
   margin-top: 20px;
   margin-right: 1.5rem;
+
+  @media (max-width: 768px) {
+    margin-right: 0;
+    width: 100%;
+  }
 `;
 
 const AddServerInput = styled.input`
@@ -45,6 +70,13 @@ const AddServerInput = styled.input`
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
+
+  @media (max-width: 768px) {
+    padding: 0;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-size: 18px;
+  }
 `;
 
 const SidebarList = styled.ul`
@@ -114,9 +146,9 @@ export const Sidebar = () => {
   return (
     <>
       <div style={{ display: 'flex' }}>
-        <div style={{ marginRight: '255px' }}>
+        <Container>
           <SidebarButton isOpen={isOpen} onClick={toggleSidebar}>
-            {isOpen ? 'Close' : 'Open'}
+            {isOpen ? '<' : '>'}
           </SidebarButton>
           <SidebarContainer isOpen={isOpen}>
             <SidebarContent>
@@ -131,7 +163,7 @@ export const Sidebar = () => {
                   value={newServerTitle}
                   onChange={(e) => setNewServerTitle(e.target.value)}
                 />
-                <button type="submit">Create Server</button>
+                <LogoutButton type="submit">Create Server</LogoutButton>
               </AddServerForm>
 
               {currentUser ? (
@@ -149,7 +181,7 @@ export const Sidebar = () => {
               )}
             </SidebarContent>
           </SidebarContainer>
-        </div>
+        </Container>
         <div id="detail">
           <Outlet />
         </div>
