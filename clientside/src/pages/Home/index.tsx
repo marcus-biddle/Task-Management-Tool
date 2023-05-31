@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useUserContext } from '../../hooks/contexts/UserContext';
 import { User } from '../../api/userApi';
-import { redirect } from 'react-router';
 import { capitalizeFirstLetter } from '../../helpers/random';
 
 const Container = styled.div`

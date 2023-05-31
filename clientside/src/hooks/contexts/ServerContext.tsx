@@ -31,7 +31,7 @@ export const ServerProvider: React.FC<React.PropsWithChildren<{}>> = ({ children
   const handleAddServer = async (formData: any) => {
     try {
       const response = await addServer(formData);
-      const { server, message } = response.data;
+      const { server } = response.data;
       setServers((prevServers) => [...prevServers, server]);
       console.log('Added server:', server);
     } catch (error) {
@@ -43,7 +43,7 @@ export const ServerProvider: React.FC<React.PropsWithChildren<{}>> = ({ children
   const handleUpdateServer = async (updatedServer: Server) => {
     try {
       const response = await updateServer(updatedServer);
-      const { server, servers, message } = response.data;
+      const { server, servers } = response.data;
       console.log('Updated server', server);
       setServers(servers);
       return server;

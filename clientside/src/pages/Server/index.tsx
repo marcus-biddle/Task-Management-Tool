@@ -8,7 +8,6 @@ import { Server } from '../../api/serverApi';
 import { useUserContext } from '../../hooks/contexts/UserContext';
 import { getName, getNamesInServer } from '../../helpers/api';
 import { formatDateTime } from '../../helpers/random';
-import { User } from '../../api/userApi';
 
 const Container = styled.div`
   display: flex;

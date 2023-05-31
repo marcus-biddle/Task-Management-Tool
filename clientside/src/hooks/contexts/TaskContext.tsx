@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
+import React, { createContext, useState, useContext } from 'react';
 import { getTasks, addTask, updateTask, deleteTask, Task } from '../../api/taskApi';
 
 interface TaskContextType {
@@ -16,7 +16,7 @@ export const TaskProvider: React.FC<React.PropsWithChildren<{}>> = ({ children }
 
   const fetchTasks = async (serverId: string): Promise<Task[]> => {
     try {
-      const { status, data } = await getTasks(serverId);
+      const { data } = await getTasks(serverId);
       setTasks(data.tasks);
       return data.tasks;
     } catch (error) {

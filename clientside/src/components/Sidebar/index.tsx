@@ -1,4 +1,4 @@
-import { Outlet, useParams } from 'react-router';
+import { Outlet } from 'react-router';
 import { Link } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
@@ -101,8 +101,6 @@ const SidebarListItem = styled.li`
 
 export const Sidebar = () => {
   const { servers, addServer } = useServerContext();
-  const { id } = useParams();
-  const _id: string = id ? id : '';
   const [isOpen, setIsOpen] = useState(false);
   const [newServerTitle, setNewServerTitle] = useState('');
   const [currentUser, setCurrentUser] = useState<any>(null);
