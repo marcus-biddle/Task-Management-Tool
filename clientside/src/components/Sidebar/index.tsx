@@ -8,6 +8,7 @@ import { LogoutButton } from '../../pages/Home';
 
 const Container = styled.div`
   margin-right: 255px;
+  z-Index: 100;
 
   @media (max-width: 768px) {
     margin-right: 1.75rem;
@@ -143,7 +144,7 @@ export const Sidebar = () => {
 
   return (
     <>
-      <div style={{ display: 'flex' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
         <Container>
           <SidebarButton isOpen={isOpen} onClick={toggleSidebar}>
             {isOpen ? '<' : '>'}
@@ -180,7 +181,7 @@ export const Sidebar = () => {
             </SidebarContent>
           </SidebarContainer>
         </Container>
-        <div id="detail">
+        <div>
           <Outlet />
         </div>
       </div>

@@ -9,10 +9,10 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   height: 100vh;
-  padding-left: 15rem;
+  padding-right: 18rem;
 
   @media (max-width: 768px) {
-    padding: 0;
+    padding-right: 3.5rem;
   }
 `;
 

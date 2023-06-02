@@ -13,11 +13,16 @@ const Container = styled.div`
   display: flex;
   position: relative;
   padding-left: 10rem;
+  z-index: 1;
 
   @media (max-width: 768px) {
     flex-direction: column-reverse;
     padding-left: .75rem;
     width: 100%;
+  }
+
+  @media (min-width: 1200px) {
+    padding-right: 10rem;
   }
 `;
 
@@ -31,17 +36,20 @@ const MainContent = styled.div`
     padding-right: 0;
     padding: 0;
   }
+
+  @media (min-width: 1200px) {
+    padding-right: 29rem;
+  }
 `;
 
 const Sidebar = styled.div<{ isOpen: boolean }>`
   position: absolute;
   height: 95vh;
-  right: ${({ isOpen }) => (isOpen ? '-16.2rem' : '-195px')};
+  right: ${({ isOpen }) => (isOpen ? '0' : '-195px')};
   width: 300px;
   background-color: #f5f5f5;
   padding: 20px;
   transition: right 0.3s ease-in-out;
-  top: -15rem;
   opacity: ${({ isOpen }) => (isOpen ? '1' : '0')};
   visibility: ${({ isOpen }) => (isOpen ? 'visible' : 'hidden')};
   display: flex;
@@ -55,8 +63,8 @@ const Sidebar = styled.div<{ isOpen: boolean }>`
     opacity: ${({ isOpen }) => (isOpen ? '1' : '0')};
     visibility: ${({ isOpen }) => (isOpen ? 'visible' : 'hidden')};
     right: ${({ isOpen }) => (isOpen ? '-14px' : '-150px')};
-    top: -13rem;
     height: 88vh;
+    top: 0;
   }
 `;
 
@@ -300,7 +308,6 @@ const GoBackButton = styled.button`
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  visibility: hidden;
 
   &:hover {
     background-color: rgba(255, 255, 255, 0.1);
@@ -309,7 +316,6 @@ const GoBackButton = styled.button`
   @media (max-width: 768px) {
     font-size: 12px;
     padding: 4px 8px;
-    visibility: visible;
   }
 `;
 
