@@ -1,0 +1,38 @@
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+li {
+    display: inline;
+    padding: 0 8px 0 8px;
+}
+
+nav {
+    display: flex;
+    margin-left: auto;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+}
+
+a:active {
+    color: purple;
+}
+
+a:visited {
+    color: white;
+}
+
+.header-container {
+    display: flex;
+    padding: 16px 24px 16px 24px;
+    background-color: rgb(9, 54, 117);
+    color: white;
+    font-weight: 600;
+    letter-spacing: .5px;
+    word-spacing: -1.5px;
+}
