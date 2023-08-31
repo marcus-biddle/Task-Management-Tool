@@ -2,4 +2,61 @@
     height: 100vh;
     color: black;
     background-color: rgb(255, 255, 255);
+    margin: 0 auto;
+    padding: 2rem;
+    text-align: center;
 }
+
+h2 {
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1.12px;
+}
+  
+  /* Style the table */
+  table {
+    width: 80%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Style table headers */
+  th {
+    background-color: rgb(9, 54, 117);
+    color: white;
+    padding: 10px;
+  }
+  
+  /* Style table cells */
+  td {
+    padding: 10px;
+    border: 1px solid #ccc;
+  }
+  
+  /* Style even rows with a background color */
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+
+  .tb-options {
+    display: flex;
+    width: 80%;
+    margin: 20px auto;
+    justify-content: right;
+  }
+
+  .tb-options button {
+    margin-left: 16px;
+    text-transform: uppercase;
+    font-weight: 300;
+  }
+
+  .tb-options button:nth-child(2) {
+    background-color: rgb(229, 72, 19);
+  }
+
+  .tb-options button:nth-child(1) {
+    background-color: rgba(64, 114, 241, 0.817);
+  }
+  
