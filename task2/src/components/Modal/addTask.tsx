@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import './style.css';
 
 interface ModalProps {
@@ -7,13 +7,54 @@ interface ModalProps {
 
 // TODO: Style modal
 const AddTaskModal = ({ showModal }: ModalProps) => {
+    const [text, setText] = useState('');
+    // const [email, setEmail] = useState('');
+
+    const handletextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setText(e.target.value);
+      };
+    
+    //   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //     setEmail(e.target.value);
+    //   };
+
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        // You can process the form data here, e.g., send it to a server
+        console.log('text:', text);
+        // console.log('Email:', email);
+      };
+
   return (
     <div className='modal-background'>
         <div className='modal-container'>
-            <button onClick={() => showModal(false)}>X</button>
-            <p>test</p>
-            <button onClick={() => showModal(false)}>Cancel</button>
-            <button>Add</button>
+            <button onClick={() => showModal(false)} className='titleCloseBtn'>X</button>
+            <form onSubmit={handleSubmit}>
+                <div className='text-input-container'>
+                    <label>What is the Task?</label>
+                    <input
+                        type="text"
+                        value={text}
+                        onChange={handletextChange}
+                        required
+                    />
+                </div>
+                {/* <div>
+                    <label>Email:</label>
+                    <input
+                        type="email"
+                        value={email}
+                        onChange={handleEmailChange}
+                        required
+                    />
+                </div> */}
+                <div className='modal-btn-options'>
+                    <button onClick={() => showModal(false)} id='cancel-btn'>Cancel</button>
+                    <button type="submit">Submit</button>
+                </div>
+        </form>
+        
+            
         </div>
     </div>
   )
