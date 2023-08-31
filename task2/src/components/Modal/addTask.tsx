@@ -3,10 +3,11 @@ import './style.css';
 
 interface ModalProps {
     showModal: Dispatch<SetStateAction<boolean>>;
+    onSubmit: (taskText: string) => void;
 }
 
 // TODO: Style modal
-const AddTaskModal = ({ showModal }: ModalProps) => {
+const AddTaskModal = ({ showModal, onSubmit }: ModalProps) => {
     const [text, setText] = useState('');
     // const [email, setEmail] = useState('');
 
@@ -21,7 +22,8 @@ const AddTaskModal = ({ showModal }: ModalProps) => {
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         // You can process the form data here, e.g., send it to a server
-        console.log('text:', text);
+        onSubmit(text);
+        showModal(false);
         // console.log('Email:', email);
       };
 

@@ -59,4 +59,9 @@ h2 {
   .tb-options button:nth-child(1) {
     background-color: rgba(64, 114, 241, 0.817);
   }
+
+  table button {
+    background-color: transparent;
+    transform: scale(1.15);
+  }
   
