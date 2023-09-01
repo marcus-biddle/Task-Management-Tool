@@ -1,0 +1,29 @@
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.update-btn {
+    line-height: 0;
+    text-transform: uppercase;
+    font-size: 12px;
+    color: rgba(0, 132, 255, 0.764);
+    display: flex;
+    justify-content: right;
+    margin-right: 16px;
+    cursor: pointer;
+}
+
+.update-btn:hover {
+    text-decoration: underline;
+}
+
+.header {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    margin-right: 16px;
+    margin-left: 16px;
+}
+
+.longterm-container {
+    margin: 0 16px 0 16px;
+}

@@ -5,7 +5,7 @@ import './style.css';
 const Header = () => {
   return (
     <div className='header-container'>
-        <div>Project</div>
+        <div className='logo'>Project</div>
         <nav>
             <ul>
                 <li><Link to={'/'}>Home</Link></li>

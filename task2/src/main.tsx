@@ -7,6 +7,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import TaskBoard from './components/TaskBoard/index.tsx';
+import Goals from './components/Goals/index.tsx';
 
 const router = createBrowserRouter([
   {
@@ -16,6 +17,10 @@ const router = createBrowserRouter([
       {
         path: "task-board",
         element: <TaskBoard />,
+      },
+      {
+        path: "goals",
+        element: <Goals />,
       },
     ],
   },

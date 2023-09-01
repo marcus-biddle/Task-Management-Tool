@@ -48,7 +48,7 @@ const TaskBoard = () => {
         {openModal && <AddTaskModal showModal={setOpenModal} onSubmit={onSubmit}/>}
         {openDeleteModal && <DeleteTaskModal showDeleteModal={setOpenDeleteModal} onDelete={handleDelete}/>}
         <div className='tb-container'>
-            <h2>Task Board</h2>
+            <h1>Task Board</h1>
             <div className='tb-options'>
                 <button onClick={() => setOpenModal(true)}>Add</button>
                 <button onClick={() => setOpenDeleteModal(true)}>Delete</button>

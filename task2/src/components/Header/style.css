@@ -36,3 +36,21 @@ a:visited {
     letter-spacing: .5px;
     word-spacing: -1.5px;
 }
+
+@media (max-width: 768px) {
+    .logo {
+        display: none;
+    }
+    .header-container {
+        padding: 16px 8px 16px 8px;
+        display: flex;
+        justify-content: space-between;
+    }
+    li {
+        display: inline;
+    }
+    
+    nav {
+        width: 90%;
+    }
+}

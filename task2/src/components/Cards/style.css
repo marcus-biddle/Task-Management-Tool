@@ -1,0 +1,49 @@
+/* GoalCard.css */
+
+.goal-card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 16px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    flex: 1;
+  }
+
+  .mini-card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 8px;
+    margin: 16px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    flex: 1;
+    display: inline-block;
+  }
+
+  .mini-title {
+    font-size: 16px;
+    padding: 4px;
+  }
+
+  .mini-footer {
+    font-size: 12px;
+    color: #777;
+  }
+  
+  .goal-title {
+    font-size: 20px;
+    margin-bottom: 8px;
+  }
+  
+  .goal-description {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 12px;
+  }
+  
+  .goal-footer {
+    font-size: 14px;
+    color: #777;
+  }
+  
