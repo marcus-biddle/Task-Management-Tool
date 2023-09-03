@@ -6,6 +6,16 @@
     display: flex;
     justify-content: center;
   }
+
+  .goal-modal-background {
+    width: 98.8vw;
+    height: 120%;
+    background-color: rgba(200, 200, 200);
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    top: 53px;
+  }
   
   .modal-container {
     width: 500px;

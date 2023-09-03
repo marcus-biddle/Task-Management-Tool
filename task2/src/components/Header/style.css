@@ -38,9 +38,6 @@ a:visited {
 }
 
 @media (max-width: 768px) {
-    .logo {
-        display: none;
-    }
     .header-container {
         padding: 16px 8px 16px 8px;
         display: flex;
@@ -51,6 +48,13 @@ a:visited {
     }
     
     nav {
-        width: 90%;
+        
+    }
+    .logo {
+        font-size: 16px;
+    }
+
+    .logo::after {
+        content: " |";
     }
 }

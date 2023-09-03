@@ -7,4 +7,5 @@
     background-color: #fff;
     flex: 1;
     display: inline-block;
+    cursor: pointer;
 }

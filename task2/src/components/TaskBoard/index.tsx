@@ -27,7 +27,7 @@ const TaskBoard = () => {
     }
 
     const onSubmit = (taskText: string) => {
-        const newTask = { id: tasks.length + 1, text: taskText, completed: false};
+        const newTask = { id: tasks[tasks.length - 1].id + 1, text: taskText, completed: false};
         const updateTable = [...tasks, newTask];
         setTasks(updateTable);
     }
@@ -48,7 +48,7 @@ const TaskBoard = () => {
         {openModal && <AddTaskModal showModal={setOpenModal} onSubmit={onSubmit}/>}
         {openDeleteModal && <DeleteTaskModal showDeleteModal={setOpenDeleteModal} onDelete={handleDelete}/>}
         <div className='tb-container'>
-            <h1>Task Board</h1>
+            <h1 className='title'>Task Board</h1>
             <div className='tb-options'>
                 <button onClick={() => setOpenModal(true)}>Add</button>
                 <button onClick={() => setOpenDeleteModal(true)}>Delete</button>

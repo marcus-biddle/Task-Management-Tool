@@ -7,6 +7,14 @@
     text-align: center;
 }
 
+.title {
+  font-size: 48px;
+  line-height: 64px;
+  margin-left: 16px;
+  letter-spacing: -1.5px;
+  text-align: center;
+}
+
 h1 {
     font-weight: 300;
     letter-spacing: 1.12px;
